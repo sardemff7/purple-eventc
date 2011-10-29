@@ -59,6 +59,8 @@ PKG_CHECK_MODULES(PURPLE, purple >= 2.6.0)
 PURPLE_VALAFLAGS="--pkg purple-custom"
 AC_SUBST(PURPLE_VALAFLAGS)
 AC_DEFINE_UNQUOTED([PURPLE_DATADIR], ["`pkg-config --variable=datadir purple`"], [libpurple data directory])
+plugindir="`pkg-config --variable=plugindir purple`"
+AC_SUBST(plugindir)
 
 
 AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug], [Enable debug]), enable_debug=$enableval, enable_debug=no)
