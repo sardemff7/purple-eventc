@@ -88,46 +88,40 @@ namespace PurpleEventc
                 return;
             unowned string name = get_best_buddy_name(buddy);
 
-            string icon_base64 = null;
-            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-icon") )
-            {
-                var icon = buddy.get_icon();
-                if ( icon != null )
-                    icon_base64 = GLib.Base64.encode(icon.get_data());
-                else
-                {
-                    unowned Purple.PluginProtocolInfo info = Purple.find_prpl(buddy.account.get_protocol_id()).get_protocol_info();
-                    string protoname = null;
-                    if ( info.list_icon != null )
-                        protoname = info.list_icon(buddy.account, null);
-
-                    string filename = null;
-                    if ( protoname != null )
-                        filename = GLib.Path.build_filename(Config.PURPLE_DATADIR, "pixmaps", "pidgin", "protocols", "scalable", protoname + ".svg");
-
-                    if ( ( filename != null ) && ( GLib.FileUtils.test(filename, GLib.FileTest.IS_REGULAR) ) )
-                    {
-                        var file = GLib.File.new_for_path(filename);
-                        try
-                        {
-                            string icon_data;
-                            file.load_contents(null, out icon_data, null);
-                            icon_base64 = GLib.Base64.encode(icon_data.data);
-                        }
-                        catch ( GLib.Error e )
-                        {
-                            GLib.warning(_("Couldn’t load protocol icon file: %s"), e.message);
-                        }
-                    }
-                }
-            }
-
             var data = e_data;
-            if ( icon_base64 != null )
+
+            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-icon") )
             {
                 if ( data == null )
                     data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
-                data.insert("icon", (owned)icon_base64);
+
+                var buddy_icon = buddy.get_icon();
+                if ( buddy_icon != null )
+                    data.insert("buddy-icon", GLib.Base64.encode(buddy_icon.get_data()));
+
+                unowned Purple.PluginProtocolInfo info = Purple.find_prpl(buddy.account.get_protocol_id()).get_protocol_info();
+                string protoname = null;
+                if ( info.list_icon != null )
+                    protoname = info.list_icon(buddy.account, null);
+
+                string filename = null;
+                if ( protoname != null )
+                    filename = GLib.Path.build_filename(Config.PURPLE_DATADIR, "pixmaps", "pidgin", "protocols", "scalable", protoname + ".svg");
+
+                if ( ( filename != null ) && ( GLib.FileUtils.test(filename, GLib.FileTest.IS_REGULAR) ) )
+                {
+                    var file = GLib.File.new_for_path(filename);
+                    try
+                    {
+                        string protocol_icon_data;
+                        file.load_contents(null, out protocol_icon_data, null);
+                        data.insert("protocol-icon", GLib.Base64.encode(protocol_icon_data.data));
+                    }
+                    catch ( GLib.Error e )
+                    {
+                        GLib.warning(_("Couldn’t load protocol icon file: %s"), e.message);
+                    }
+                }
             }
 
             try
