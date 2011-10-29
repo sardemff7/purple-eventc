@@ -110,7 +110,7 @@ namespace PurpleEventc
                 else
                     action = "back";
             }
-            else if ( old_avail && new_avail )
+            else if ( msg != old_status.get_attr_string("message") )
             {
                 if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/status-message") )
                     return;
@@ -122,7 +122,7 @@ namespace PurpleEventc
             }
             else
                 return;
-            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);;
+            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
             data.insert("message", msg.dup());
             Utils.send(buddy, action, data);
         }
