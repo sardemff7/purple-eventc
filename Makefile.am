@@ -59,7 +59,7 @@ CLEANFILES += \
 	$(eventc_la_VALASOURCES:.vala=.c)
 
 
-install-exec-hook: la-files-removal
+install-data-hook: la-files-removal
 
 la-files-removal:
 	cd $(DESTDIR)/$(plugindir) && \
