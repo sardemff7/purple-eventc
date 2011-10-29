@@ -1,0 +1,151 @@
+# French translations for purple-eventc package.
+# Copyright (C) 2011 THE purple-eventc'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the purple-eventc package.
+#  <sardemff7+pidgin@sardemff7.net>, 2011.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: purple-eventc 0.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2011-10-29 15:40+0200\n"
+"PO-Revision-Date: 2011-10-29 15:42+0200\n"
+"Last-Translator:  <sardemff7+pidgin@sardemff7.net>\n"
+"Language-Team: French\n"
+"Language: fr\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: ../src/eventc.vala:58
+#, c-format
+msgid "Couldn’t change client info: %s"
+msgstr "Impossible de modifier les informations client : %s"
+
+#: ../src/eventc.vala:201
+#, c-format
+msgid "Error connecting to eventd: %s"
+msgstr "Erreur lors de la connexion à eventd : %s"
+
+#: ../src/eventc.vala:228
+msgid "Propagate events to eventd"
+msgstr "Propage les événements à eventd"
+
+#: ../src/eventc.vala:229
+msgid "Use eventd to inform the user of events"
+msgstr "Utilise eventd pour informer les utilisateurs des événements"
+
+#: ../src/eventc.vala:408
+#, c-format
+msgid "Error closing connection to eventd: %s"
+msgstr "Erreur lors de la fermeture de la connexion à eventd : %s"
+
+#: ../src/utils.vala:119
+#, c-format
+msgid "Couldn’t load protocol icon file: %s"
+msgstr "Impossible de charger l’icône de protocole : %s"
+
+#: ../src/utils.vala:139
+#, c-format
+msgid "Error dispatching event: %s"
+msgstr "Erreur lors de l’envoi de l’événement : %s"
+
+#: ../src/ui.vala:34
+msgid "Server:"
+msgstr "Serveur :"
+
+#: ../src/ui.vala:40
+msgid "Host"
+msgstr "Hôte"
+
+#: ../src/ui.vala:46
+msgid "Port"
+msgstr "Port"
+
+#: ../src/ui.vala:52
+msgid "Client:"
+msgstr "Client :"
+
+#: ../src/ui.vala:58
+msgid "Client type"
+msgstr "Type du client"
+
+#: ../src/ui.vala:64
+msgid "Client name"
+msgstr "Nom du client"
+
+#: ../src/ui.vala:69
+msgid "Connection:"
+msgstr "Connexion :"
+
+#: ../src/ui.vala:75
+msgid "Timeout (seconds, 0 to disable)"
+msgstr "Délai (en secondes, 0 pour désactiver)"
+
+#: ../src/ui.vala:82
+msgid "Max reconnection tries (-1 to disable, 0 for infinite)"
+msgstr "Tentatives de reconnexion max (-1 pour désactiver, 0 pour l’infini)"
+
+#: ../src/ui.vala:89
+msgid "Retry delay (0-3600 seconds)"
+msgstr "Délai (0-3600 secondes)"
+
+#: ../src/ui.vala:95
+msgid "Events:"
+msgstr "Événements :"
+
+#: ../src/ui.vala:101
+msgid "New messages"
+msgstr "Nouveau messages"
+
+#: ../src/ui.vala:107
+msgid "Buddy signing on"
+msgstr "Connexion d’un contact"
+
+#: ../src/ui.vala:113
+msgid "Buddy signing off"
+msgstr "Déconnexion d’un contact"
+
+#: ../src/ui.vala:119
+msgid "Buddy going away"
+msgstr "Absence d’un contact"
+
+#: ../src/ui.vala:125
+msgid "Buddy going idle"
+msgstr "Inactivité d’un contact"
+
+#: ../src/ui.vala:131
+msgid "Buddy coming back"
+msgstr "Retour d’un contact"
+
+#: ../src/ui.vala:137
+msgid "Status message change (or removal)"
+msgstr "Changement (ou suppression) de message de statut"
+
+#: ../src/ui.vala:142
+msgid "Restrictions:"
+msgstr "Restrictions :"
+
+#: ../src/ui.vala:148
+msgid "Even for a blocked buddy"
+msgstr "Même pour un contact bloqué"
+
+#: ../src/ui.vala:154
+msgid "Only from new conversation"
+msgstr "Seulement pour les nouvelles conversations"
+
+#: ../src/ui.vala:160
+msgid "Only when available"
+msgstr "Seulement si je suis disponible"
+
+#: ../src/ui.vala:166
+msgid "Do not transmit buddy icon"
+msgstr "Ne pas transmettre d’icône"
+
+#: ../src/ui.vala:227 ../src/ui.vala:236
+msgid "Dispatch to eventd"
+msgstr "Envoyer à eventd"
+
+#: ../src/ui.vala:229 ../src/ui.vala:238
+msgid "Do not dispatch to eventd"
+msgstr "Ne pas envoyer à eventd"

@@ -1,0 +1,4 @@
+src/plugin.c
+src/eventc.vala
+src/utils.vala
+src/ui.vala

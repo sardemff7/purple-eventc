@@ -1,5 +1,7 @@
 ACLOCAL_AMFLAGS = -I m4
 
+SUBDIRS = po
+
 plugindir = $(libdir)/purple/plugins
 
 plugin_LTLIBRARIES =
