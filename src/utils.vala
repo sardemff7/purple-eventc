@@ -24,6 +24,8 @@ namespace PurpleEventc
 {
     namespace Utils
     {
+        static GLib.List<weak Purple.Contact> current_events;
+
         static unowned string
         get_best_buddy_name(Purple.Buddy buddy)
         {
@@ -49,8 +51,10 @@ namespace PurpleEventc
             #endif
 
             unowned Purple.Account account = buddy.get_account();
+            unowned Purple.Contact contact = buddy.get_contact();
 
-            if ( just_signed_on_accounts.find(account) != null )
+            if ( ( just_signed_on_accounts.find(account) != null )
+                 || ( current_events.find(contact) != null ) )
                 return false;
 
             if ( ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/only-available") )
@@ -71,8 +75,8 @@ namespace PurpleEventc
                 ) )
                 return false;
 
-            unowned Purple.BlistNode contact = (Purple.BlistNode *)(&(buddy.get_contact().node));
-            int deactivate = contact.get_int("eventc/deactivate");
+            unowned Purple.BlistNode contact_node = (Purple.BlistNode *)(&(contact.node));
+            int deactivate = contact_node.get_int("eventc/deactivate");
             if ( deactivate == 0 )
             {
                 unowned Purple.BlistNode group = (Purple.BlistNode *)(&(buddy.get_group().node));
@@ -87,6 +91,13 @@ namespace PurpleEventc
             if ( ( ! eventc.is_connected() ) || ( ! is_buddy_dispatch(buddy) ) )
                 return;
             unowned string name = get_best_buddy_name(buddy);
+
+            weak Purple.Contact contact = buddy.get_contact();
+            current_events.prepend(contact);
+            Timeout.add(500, () => {
+                current_events.remove(contact);
+                return false;
+            });
 
             var data = e_data;
 
