@@ -90,7 +90,6 @@ namespace PurpleEventc
         {
             if ( ( ! eventc.is_connected() ) || ( ! is_buddy_dispatch(buddy) ) )
                 return;
-            unowned string name = get_best_buddy_name(buddy);
 
             weak Purple.Contact contact = buddy.get_contact();
             current_events.prepend(contact);
@@ -99,13 +98,11 @@ namespace PurpleEventc
                 return false;
             });
 
-            var data = e_data;
+            var data = ( e_data != null ) ? e_data : new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
+            data.insert("buddy-name", get_best_buddy_name(buddy));
 
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-icon") )
             {
-                if ( data == null )
-                    data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
-
                 var buddy_icon = buddy.get_icon();
                 if ( buddy_icon != null )
                     data.insert("buddy-icon", GLib.Base64.encode(buddy_icon.get_data()));
@@ -137,7 +134,7 @@ namespace PurpleEventc
 
             try
             {
-                eventc.event(type, name, data);
+                eventc.event(type, data);
             }
             catch ( Eventd.EventcError e )
             {

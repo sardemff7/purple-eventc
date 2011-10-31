@@ -1294,7 +1294,6 @@ namespace Purple {
 		public weak GLib.Callback join_chat;
 		public weak GLib.Callback keepalive;
 		public weak GLib.Callback list_emblem;
-		[CCode ()]
 		public weak ListIconCallback list_icon;
 		public weak GLib.Callback login;
 		public weak GLib.Callback new_xfer;
