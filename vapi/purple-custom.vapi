@@ -1259,7 +1259,7 @@ namespace Purple {
 	[CCode (cheader_filename = "purple.h")]
 	[Compact]
 	public class PluginProtocolInfo {
-		[CCode (cname = "", ctype = "const char *(*)(PurpleAccount *account, PurpleBuddy *buddy", has_target = false)]
+		[CCode (cheader_filename = "purple-custom.h", has_target = false)]
 		public delegate unowned string ListIconCallback(Purple.Account? account, Purple.Buddy? buddy);
 
 		public weak GLib.Callback add_buddies;
