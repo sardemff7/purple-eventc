@@ -121,9 +121,9 @@ namespace PurpleEventc
                     var file = GLib.File.new_for_path(filename);
                     try
                     {
-                        string protocol_icon_data;
+                        uint8[] protocol_icon_data;
                         file.load_contents(null, out protocol_icon_data, null);
-                        data.insert("protocol-icon", GLib.Base64.encode(protocol_icon_data.data));
+                        data.insert("protocol-icon", GLib.Base64.encode(protocol_icon_data));
                     }
                     catch ( GLib.Error e )
                     {
