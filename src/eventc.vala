@@ -31,22 +31,35 @@ namespace PurpleEventc
     static int tries;
 
     static uint server_info_changed_id;
+    static uint server_info_changed_timeout = 0U;
     static uint client_info_changed_id;
+    static uint client_info_changed_timeout = 0U;
     static uint timeout_changed_id;
 
     namespace Callback
     {
-        static void
-        server_info_changed(string name, Purple.PrefType type, void *val, void *user_data)
+        static bool
+        server_info_changed_apply(void *user_data)
         {
+            server_info_changed_timeout = 0U;
             eventc.host = Purple.prefs_get_string("/plugins/core/eventc/server/host");
             eventc.port = (uint16)Purple.prefs_get_int("/plugins/core/eventc/server/port");
             connect();
+            return false;
         }
 
         static void
-        client_info_changed(string name, Purple.PrefType type, void *val, void *user_data)
+        server_info_changed(string name, Purple.PrefType type, void *val, void *user_data)
         {
+            if ( server_info_changed_timeout > 0U )
+                Purple.timeout_remove(server_info_changed_timeout);
+            server_info_changed_timeout = Purple.timeout_add_seconds(5, (Purple.SourceFunc)server_info_changed_apply, null);
+        }
+
+        static void
+        client_info_changed_apply(void *user_data)
+        {
+            client_info_changed_timeout = 0U;
             eventc.client_type = Purple.prefs_get_string("/plugins/core/eventc/client/type");
             eventc.client_name = Purple.prefs_get_string("/plugins/core/eventc/client/name");
             try
@@ -59,6 +72,14 @@ namespace PurpleEventc
                 if ( ! eventc.is_connected() )
                     reconnect();
             }
+        }
+
+        static void
+        client_info_changed(string name, Purple.PrefType type, void *val, void *user_data)
+        {
+            if ( client_info_changed_timeout > 0U )
+                Purple.timeout_remove(client_info_changed_timeout);
+            client_info_changed_timeout = Purple.timeout_add_seconds(5, (Purple.SourceFunc)client_info_changed_apply, null);
         }
 
         static void
