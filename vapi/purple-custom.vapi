@@ -2761,6 +2761,9 @@ namespace Purple {
 		SEND,
 		RECEIVE
 	}
+	[CCode (cheader_filename = "glib.h", has_target = false, cname = "GSourceFunc")]
+	public delegate bool SourceFunc(void *data);
+
 	[CCode (cheader_filename = "purple.h")]
 	public delegate void AccountRegistrationCb (Purple.Account account, bool succeeded);
 	[CCode (cheader_filename = "purple.h", has_target = false)]
@@ -4004,9 +4007,9 @@ namespace Purple {
 	[CCode (cheader_filename = "purple.h")]
 	public static unowned string time_format (void* tm);
 	[CCode (cheader_filename = "purple.h")]
-	public static uint timeout_add (uint interval, GLib.SourceFunc function, void* data);
+	public static uint timeout_add (uint interval, SourceFunc function, void *data);
 	[CCode (cheader_filename = "purple.h")]
-	public static uint timeout_add_seconds (uint interval, GLib.SourceFunc function, void* data);
+	public static uint timeout_add_seconds (uint interval, SourceFunc function, void *data);
 	[CCode (cheader_filename = "purple.h")]
 	public static bool timeout_remove (uint handle);
 	[CCode (cheader_filename = "purple.h")]

@@ -180,9 +180,7 @@ namespace PurpleEventc
 
             Purple.Account *account = conn.get_account();
             just_signed_on_accounts.prepend(account);
-            Timeout.add_seconds(5, () => {
-                return account_signed_on_timeout(account);
-            });
+            Purple.timeout_add_seconds(5, (Purple.SourceFunc)account_signed_on_timeout, account);
         }
     }
 
@@ -215,7 +213,7 @@ namespace PurpleEventc
     static void
     reconnect()
     {
-        retry_source = Timeout.add_seconds(Purple.prefs_get_int("/plugins/core/eventc/connection/retry-delay"), connect);
+        retry_source = Purple.timeout_add_seconds(Purple.prefs_get_int("/plugins/core/eventc/connection/retry-delay"), connect, null);
     }
 
     static void
