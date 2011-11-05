@@ -294,6 +294,7 @@ namespace PurpleEventc
             Purple.prefs_get_string("/plugins/core/eventc/client/name")
             );
 
+        eventc.mode = Eventd.Eventc.Mode.NORMAL;
         eventc.timeout = Purple.prefs_get_int("/plugins/core/eventc/connection/timeout");
 
         server_info_changed_id = Purple.prefs_connect_callback(plugin,
