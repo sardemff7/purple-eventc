@@ -111,7 +111,30 @@ namespace PurpleEventc
             bool new_avail = new_status.is_available();
             unowned string msg = new_status.get_attr_string("message");
             unowned string action = null;
-            if ( old_avail && ( ! new_avail ) )
+            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
+            if ( old_status.is_independent() )
+            {
+                if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/specials") )
+                    return;
+
+                action = old_status.get_id();
+                /* TODO: make it work
+                foreach ( unowned Purple.StatusAttr attr in old_status.get_type().get_attrs() )
+                {
+                    var name = attr.get_name();
+                    unowned Purple.Value @value = attr.get_value();
+                    switch ( @value.type )
+                    {
+                    case Purple.Type.STRING:
+                        data.insert(name, @value.get_string());
+                    break;
+                    default:
+                    break;
+                    }
+                }
+                */
+            }
+            else if ( old_avail && ( ! new_avail ) )
             {
                 if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/away") )
                     return;
@@ -143,8 +166,8 @@ namespace PurpleEventc
             }
             else
                 return;
-            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
-            data.insert("message", msg.dup());
+            if ( msg != null )
+                data.insert("message", msg.dup());
             Utils.send(buddy, action, data);
         }
 
@@ -270,6 +293,7 @@ namespace PurpleEventc
         Purple.prefs_add_bool("/plugins/core/eventc/events/idle", true);
         Purple.prefs_add_bool("/plugins/core/eventc/events/back", true);
         Purple.prefs_add_bool("/plugins/core/eventc/events/status-message", false);
+        Purple.prefs_add_bool("/plugins/core/eventc/events/specials", false);
 
         Purple.prefs_add_none("/plugins/core/eventc/restrictions");
         Purple.prefs_add_bool("/plugins/core/eventc/restrictions/blocked", true);

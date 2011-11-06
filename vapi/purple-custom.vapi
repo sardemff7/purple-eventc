@@ -1796,6 +1796,7 @@ namespace Purple {
 		public unowned string get_id ();
 		public unowned string get_name ();
 		public unowned Purple.Presence get_presence ();
+		public unowned Purple.StatusType get_type ();
 		public static void init ();
 		public bool is_active ();
 		public bool is_available ();
@@ -1831,7 +1832,7 @@ namespace Purple {
 		[CCode (has_construct_function = false)]
 		public StatusType.full (Purple.StatusPrimitive primitive, string id, string name, bool saveable, bool user_settable, bool independent);
 		public unowned Purple.StatusAttr get_attr (string id);
-		public unowned GLib.List get_attrs ();
+		public unowned GLib.List<Purple.StatusAttr> get_attrs ();
 		public unowned string get_id ();
 		public unowned string get_name ();
 		public unowned string get_primary_attr ();

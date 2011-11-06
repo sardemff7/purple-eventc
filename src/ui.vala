@@ -138,6 +138,12 @@ namespace PurpleEventc
                 );
             frame->add(pref);
 
+            pref = new Purple.PluginPref.with_name_and_label(
+                "/plugins/core/eventc/events/specials",
+                _("Special events")
+                );
+            frame->add(pref);
+
             pref = new Purple.PluginPref.with_label(
                 _("Restrictions:")
                 );
