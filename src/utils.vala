@@ -101,17 +101,22 @@ namespace PurpleEventc
             var data = ( e_data != null ) ? e_data : new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
             data.insert("buddy-name", get_best_buddy_name(buddy));
 
-            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-icon") )
+            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-buddy-icon") )
             {
                 var buddy_icon = buddy.get_icon();
                 if ( buddy_icon != null )
                     data.insert("buddy-icon", GLib.Base64.encode(buddy_icon.get_data()));
+            }
 
-                unowned Purple.PluginProtocolInfo info = Purple.find_prpl(buddy.account.get_protocol_id()).get_protocol_info();
-                string protoname = null;
-                if ( info.list_icon != null )
-                    protoname = info.list_icon(buddy.account, null);
+            unowned Purple.PluginProtocolInfo info = Purple.find_prpl(buddy.account.get_protocol_id()).get_protocol_info();
+            string protoname = null;
+            if ( info.list_icon != null )
+                protoname = info.list_icon(buddy.account, null);
 
+            data.insert("protocol-name", protoname);
+
+            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-protocol-icon") )
+            {
                 string filename = null;
                 if ( protoname != null )
                     filename = GLib.Path.build_filename(Config.PURPLE_DATADIR, "pixmaps", "pidgin", "protocols", "scalable", protoname + ".svg");

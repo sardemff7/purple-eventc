@@ -299,7 +299,8 @@ namespace PurpleEventc
         Purple.prefs_add_bool("/plugins/core/eventc/restrictions/blocked", true);
         Purple.prefs_add_bool("/plugins/core/eventc/restrictions/new-conv-only", false);
         Purple.prefs_add_bool("/plugins/core/eventc/restrictions/only-available", false);
-        Purple.prefs_add_bool("/plugins/core/eventc/restrictions/no-icon", false);
+        Purple.prefs_add_bool("/plugins/core/eventc/restrictions/no-buddy-icon", false);
+        Purple.prefs_add_bool("/plugins/core/eventc/restrictions/no-protocol-icon", false);
     }
 
     static bool

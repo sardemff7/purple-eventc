@@ -168,8 +168,14 @@ namespace PurpleEventc
             frame->add(pref);
 
             pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/restrictions/no-icon",
+                "/plugins/core/eventc/restrictions/no-buddy-icon",
                 _("Do not transmit buddy icon")
+                );
+            frame->add(pref);
+
+            pref = new Purple.PluginPref.with_name_and_label(
+                "/plugins/core/eventc/restrictions/no-protocol-icon",
+                _("Do not transmit protocol icon")
                 );
             frame->add(pref);
 
