@@ -48,9 +48,9 @@ AC_SUBST(GIO_VALAFLAGS)
 #
 # Check for libeventc
 #
-PKG_CHECK_MODULES(LIBEVENTC, libeventc)
-LIBEVENTC_VALAFLAGS="--pkg libeventc"
-AC_SUBST(LIBEVENTC_VALAFLAGS)
+PKG_CHECK_MODULES(EVENTD, [libeventd-event libeventc])
+EVENTD_VALAFLAGS="--pkg libeventd-event --pkg libeventc"
+AC_SUBST(EVENTD_VALAFLAGS)
 
 #
 # Check for libpurple

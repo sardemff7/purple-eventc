@@ -23,7 +23,7 @@
 namespace PurpleEventc
 {
     static unowned Purple.Plugin plugin;
-    static Eventd.Eventc eventc;
+    static Eventc.Connection eventc;
 
     static GLib.List<weak Purple.Account> just_signed_on_accounts;
 
@@ -62,16 +62,18 @@ namespace PurpleEventc
             client_info_changed_timeout = 0U;
             eventc.client_type = Purple.prefs_get_string("/plugins/core/eventc/client/type");
             eventc.client_name = Purple.prefs_get_string("/plugins/core/eventc/client/name");
-            try
-            {
-                eventc.rename();
+            eventc.rename.begin((obj, res) => {
+                try
+                {
+                    eventc.rename.end(res);
+                }
+                catch ( Eventc.EventcError e )
+                {
+                    GLib.warning(_("Couldn’t change client info: %s"), e.message);
+                    if ( ! eventc.is_connected() )
+                        reconnect();
             }
-            catch ( Eventd.EventcError e )
-            {
-                GLib.warning(_("Couldn’t change client info: %s"), e.message);
-                if ( ! eventc.is_connected() )
-                    reconnect();
-            }
+            });
         }
 
         static void
@@ -93,7 +95,7 @@ namespace PurpleEventc
         {
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/signed-on") )
                 return;
-            Utils.send(buddy, "signed-on", null);
+            Utils.send(buddy, "signed-on");
         }
 
         static void
@@ -101,7 +103,7 @@ namespace PurpleEventc
         {
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/signed-off") )
                 return;
-            Utils.send(buddy, "signed-off", null);
+            Utils.send(buddy, "signed-off");
         }
 
         static void
@@ -111,7 +113,6 @@ namespace PurpleEventc
             bool new_avail = new_status.is_available();
             unowned string msg = new_status.get_attr_string("message");
             unowned string action = null;
-            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
             if ( old_status.is_independent() )
             {
                 if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/specials") )
@@ -166,9 +167,9 @@ namespace PurpleEventc
             }
             else
                 return;
-            if ( msg != null )
-                data.insert("message", msg.dup());
-            Utils.send(buddy, action, data);
+            Utils.send(buddy, action,
+                       "message", msg
+                      );
         }
 
         static void
@@ -176,7 +177,7 @@ namespace PurpleEventc
         {
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/idle") )
                 return;
-            Utils.send(buddy, newidle ? "idle" : "back-idle", null);
+            Utils.send(buddy, newidle ? "idle" : "back-idle");
         }
 
         static void
@@ -188,10 +189,10 @@ namespace PurpleEventc
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-msg") )
                 return;
 
-            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);;
-            data.insert("unstripped-message", message.dup());
-            data.insert("message", Purple.markup_strip_html(message));
-            Utils.send(buddy, "im-msg", data);
+            Utils.send(buddy, "im-msg",
+                       "unstripped-message", message.dup(),
+                       "message", Purple.markup_strip_html(message)
+                      );
         }
 
         static void
@@ -202,10 +203,10 @@ namespace PurpleEventc
                 return;
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-msg") )
                 return;
-            GLib.HashTable<string, string> data = new GLib.HashTable<string, string>(string.hash, GLib.str_equal);;
-            data.insert("unstripped-message", message.dup());
-            data.insert("message", Purple.markup_strip_html(message));
-            Utils.send(buddy, "chat-msg", data);
+            Utils.send(buddy, "chat-msg",
+                       "unstripped-message", message.dup(),
+                       "message", Purple.markup_strip_html(message)
+                      );
         }
 
         static bool
@@ -232,13 +233,13 @@ namespace PurpleEventc
     connect()
     {
         retry_source = 0;
-        eventc.connect_async.begin((obj, res) => {
+        eventc.connect.begin((obj, res) => {
             if ( eventc == null ) return;
             try
             {
-                eventc.connect_async.end(res);
+                eventc.connect.end(res);
             }
-            catch ( Eventd.EventcError e )
+            catch ( Eventc.EventcError e )
             {
                 GLib.warning(_("Error connecting to eventd: %s"), e.message);
                 var max_tries = Purple.prefs_get_int("/plugins/core/eventc/connection/max-tries");
@@ -312,14 +313,14 @@ namespace PurpleEventc
 
         tries = 0;
 
-        eventc = new Eventd.Eventc(
+        eventc = new Eventc.Connection(
             Purple.prefs_get_string("/plugins/core/eventc/server/host"),
             (uint16)Purple.prefs_get_int("/plugins/core/eventc/server/port"),
             Purple.prefs_get_string("/plugins/core/eventc/client/type"),
             Purple.prefs_get_string("/plugins/core/eventc/client/name")
             );
 
-        eventc.mode = Eventd.Eventc.Mode.NORMAL;
+        eventc.mode = Eventc.Connection.Mode.NORMAL;
         eventc.timeout = Purple.prefs_get_int("/plugins/core/eventc/connection/timeout");
 
         server_info_changed_id = Purple.prefs_connect_callback(plugin,
@@ -444,16 +445,18 @@ namespace PurpleEventc
             retry_source = 0;
         }
 
-        try
-        {
-            eventc.close();
-        }
-        catch ( Eventd.EventcError e )
-        {
-            GLib.warning(_("Error closing connection to eventd: %s"), e.message);
-        }
+        eventc.close.begin((obj, res) => {
+            try
+            {
+                eventc.close.end(res);
+            }
+            catch ( Eventc.EventcError e )
+            {
+                GLib.warning(_("Error closing connection to eventd: %s"), e.message);
+            }
 
-        eventc = null;
+            eventc = null;
+        });
 
         return true;
     }

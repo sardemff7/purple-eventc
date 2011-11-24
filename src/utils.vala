@@ -86,7 +86,7 @@ namespace PurpleEventc
         }
 
         static void
-        send(Purple.Buddy buddy, string type, GLib.HashTable<string, string>? e_data)
+        send(Purple.Buddy buddy, string type, ...)
         {
             if ( ( ! eventc.is_connected() ) || ( ! is_buddy_dispatch(buddy) ) )
                 return;
@@ -98,14 +98,26 @@ namespace PurpleEventc
                 return false;
             });
 
-            var data = ( e_data != null ) ? e_data : new GLib.HashTable<string, string>(string.hash, GLib.str_equal);
-            data.insert("buddy-name", get_best_buddy_name(buddy));
+            var event = new Eventd.Event(type);
+
+            var l = va_list();
+            while ( true )
+            {
+                string? key = l.arg();
+                if ( key == null )
+                    break;
+                string? val = l.arg();
+                if ( val != null )
+                    event.add_data(key, val);
+            }
+
+            event.add_data("buddy-name", get_best_buddy_name(buddy));
 
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-buddy-icon") )
             {
                 var buddy_icon = buddy.get_icon();
                 if ( buddy_icon != null )
-                    data.insert("buddy-icon", GLib.Base64.encode(buddy_icon.get_data()));
+                    event.add_data("buddy-icon", GLib.Base64.encode(buddy_icon.get_data()));
             }
 
             unowned Purple.PluginProtocolInfo info = Purple.find_prpl(buddy.account.get_protocol_id()).get_protocol_info();
@@ -113,7 +125,7 @@ namespace PurpleEventc
             if ( info.list_icon != null )
                 protoname = info.list_icon(buddy.account, null);
 
-            data.insert("protocol-name", protoname);
+            event.add_data("protocol-name", protoname);
 
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-protocol-icon") )
             {
@@ -128,7 +140,7 @@ namespace PurpleEventc
                     {
                         uint8[] protocol_icon_data;
                         file.load_contents(null, out protocol_icon_data, null);
-                        data.insert("protocol-icon", GLib.Base64.encode(protocol_icon_data));
+                        event.add_data("protocol-icon", GLib.Base64.encode(protocol_icon_data));
                     }
                     catch ( GLib.Error e )
                     {
@@ -137,16 +149,18 @@ namespace PurpleEventc
                 }
             }
 
-            try
-            {
-                eventc.event(type, data);
-            }
-            catch ( Eventd.EventcError e )
-            {
-                GLib.warning(_("Error dispatching event: %s"), e.message);
-                if ( ! eventc.is_connected() )
-                    reconnect();
-            }
+            eventc.event.begin(event, (obj, res) => {
+                try
+                {
+                    eventc.event.end(res);
+                }
+                catch ( Eventc.EventcError e )
+                {
+                    GLib.warning(_("Error dispatching event: %s"), e.message);
+                    if ( ! eventc.is_connected() )
+                        reconnect();
+                }
+            });
         }
     }
 }

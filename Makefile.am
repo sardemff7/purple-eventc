@@ -31,14 +31,14 @@ eventc_la_SOURCES = \
 eventc_la_VALAFLAGS = \
 	$(AM_VALAFLAGS) \
 	$(PURPLE_VALAFLAGS) \
-	$(LIBEVENTC_VALAFLAGS) \
+	$(EVENTD_VALAFLAGS) \
 	$(GIO_VALAFLAGS) \
 	$(GLIB_VALAFLAGS)
 
 eventc_la_CFLAGS = \
 	$(AM_CFLAGS) \
 	$(PURPLE_CFLAGS) \
-	$(LIBEVENTC_CFLAGS) \
+	$(EVENTD_CFLAGS) \
 	$(GIO_CFLAGS) \
 	$(GLIB_CFLAGS)
 
@@ -49,7 +49,7 @@ eventc_la_LDFLAGS = \
 
 eventc_la_LIBADD = \
 	$(PURPLE_LIBS) \
-	$(LIBEVENTC_LIBS) \
+	$(EVENTD_LIBS) \
 	$(GIO_LIBS) \
 	$(GLIB_LIBS)
 
