@@ -59,12 +59,6 @@ namespace PurpleEventc
                 );
             frame->add(pref);
 
-            pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/client/name",
-                _("Client name")
-                );
-            frame->add(pref);
-
             pref = new Purple.PluginPref.with_label(
                 _("Connection:")
                 );
