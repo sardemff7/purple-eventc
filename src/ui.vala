@@ -54,8 +54,8 @@ namespace PurpleEventc
             frame->add(pref);
 
             pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/client/type",
-                _("Client type")
+                "/plugins/core/eventc/client/category",
+                _("Category")
                 );
             frame->add(pref);
 

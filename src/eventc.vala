@@ -60,7 +60,7 @@ namespace PurpleEventc
         client_info_changed_apply(void *user_data)
         {
             client_info_changed_timeout = 0U;
-            eventc.client_type = Purple.prefs_get_string("/plugins/core/eventc/client/type");
+            eventc.category = Purple.prefs_get_string("/plugins/core/eventc/client/category");
             eventc.client_name = Purple.prefs_get_string("/plugins/core/eventc/client/name");
             eventc.rename.begin((obj, res) => {
                 try
@@ -278,7 +278,7 @@ namespace PurpleEventc
         Purple.prefs_add_int("/plugins/core/eventc/server/port", 0);
 
         Purple.prefs_add_none("/plugins/core/eventc/client");
-        Purple.prefs_add_string("/plugins/core/eventc/client/type", "im");
+        Purple.prefs_add_string("/plugins/core/eventc/client/category", "im");
         Purple.prefs_add_string("/plugins/core/eventc/client/name", "libpurple");
 
         Purple.prefs_add_none("/plugins/core/eventc/connection");
@@ -316,7 +316,7 @@ namespace PurpleEventc
         eventc = new Eventc.Connection(
             Purple.prefs_get_string("/plugins/core/eventc/server/host"),
             (uint16)Purple.prefs_get_int("/plugins/core/eventc/server/port"),
-            Purple.prefs_get_string("/plugins/core/eventc/client/type"),
+            Purple.prefs_get_string("/plugins/core/eventc/client/category"),
             Purple.prefs_get_string("/plugins/core/eventc/client/name")
             );
 
