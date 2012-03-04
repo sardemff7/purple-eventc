@@ -97,6 +97,12 @@ namespace PurpleEventc
             frame->add(pref);
 
             pref = new Purple.PluginPref.with_name_and_label(
+                "/plugins/core/eventc/events/new-action",
+                _("New actions (/me messages)")
+                );
+            frame->add(pref);
+
+            pref = new Purple.PluginPref.with_name_and_label(
                 "/plugins/core/eventc/events/signed-on",
                 _("Buddy signing on")
                 );

@@ -185,12 +185,21 @@ namespace PurpleEventc
             unowned Purple.Buddy buddy = Purple.find_buddy(account, sender);
             if ( buddy == null )
                 return;
-            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-msg") )
+            unowned string name = "im-msg";
+            string msg = Purple.markup_strip_html(message);
+            if ( msg.has_prefix("/me ") )
+            {
+                if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-action") )
+                    return;
+                name = "im-action";
+                msg = msg.substring(4);
+            }
+            else if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-msg") )
                 return;
 
-            Utils.send(buddy, "im-msg",
+            Utils.send(buddy, name,
                        "unstripped-message", message.dup(),
-                       "message", Purple.markup_strip_html(message)
+                       "message", msg
                       );
         }
 
@@ -200,11 +209,21 @@ namespace PurpleEventc
             unowned Purple.Buddy buddy = Purple.find_buddy(account, sender);
             if ( buddy == null )
                 return;
-            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-msg") )
+            unowned string name = "chat-msg";
+            string msg = Purple.markup_strip_html(message);
+            if ( msg.has_prefix("/me ") )
+            {
+                if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-action") )
+                    return;
+                name = "chat-action";
+                msg = msg.substring(4);
+            }
+            else if ( ! Purple.prefs_get_bool("/plugins/core/eventc/events/new-msg") )
                 return;
-            Utils.send(buddy, "chat-msg",
+
+            Utils.send(buddy, name,
                        "unstripped-message", message.dup(),
-                       "message", Purple.markup_strip_html(message)
+                       "message", msg
                       );
         }
 
@@ -286,6 +305,7 @@ namespace PurpleEventc
 
         Purple.prefs_add_none("/plugins/core/eventc/events");
         Purple.prefs_add_bool("/plugins/core/eventc/events/new-msg", true);
+        Purple.prefs_add_bool("/plugins/core/eventc/events/new-action", true);
         Purple.prefs_add_bool("/plugins/core/eventc/events/signed-on", true);
         Purple.prefs_add_bool("/plugins/core/eventc/events/signed-off", false);
         Purple.prefs_add_bool("/plugins/core/eventc/events/away", true);
