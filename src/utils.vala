@@ -88,8 +88,18 @@ namespace PurpleEventc
         static void
         send(Purple.Buddy buddy, string type, ...)
         {
-            if ( ( ! eventc.is_connected() ) || ( ! is_buddy_dispatch(buddy) ) )
+            try
+            {
+                if ( ( ! eventc.is_connected() ) || ( ! is_buddy_dispatch(buddy) ) )
+                    return;
+            }
+            catch ( Eventc.EventcError e )
+            {
+                GLib.warning(_("Error dispatching event: %s"), e.message);
+                reconnect();
                 return;
+            }
+
 
             weak Purple.Contact contact = buddy.get_contact();
             current_events.prepend(contact);
@@ -157,8 +167,16 @@ namespace PurpleEventc
                 catch ( Eventc.EventcError e )
                 {
                     GLib.warning(_("Error dispatching event: %s"), e.message);
-                    if ( ! eventc.is_connected() )
-                        reconnect();
+                    try
+                    {
+                        /*
+                         * The only error that could be throwed
+                         * here is the one we’re processing
+                         */
+                        if ( ! eventc.is_connected() )
+                            reconnect();
+                    }
+                    catch ( Eventc.EventcError e ) {}
                 }
             });
         }
