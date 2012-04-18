@@ -32,8 +32,6 @@ namespace PurpleEventc
 
     static uint server_info_changed_id;
     static uint server_info_changed_timeout = 0U;
-    static uint client_info_changed_id;
-    static uint client_info_changed_timeout = 0U;
     static uint timeout_changed_id;
 
     namespace Callback
@@ -54,33 +52,6 @@ namespace PurpleEventc
             if ( server_info_changed_timeout > 0U )
                 Purple.timeout_remove(server_info_changed_timeout);
             server_info_changed_timeout = Purple.timeout_add_seconds(5, (Purple.SourceFunc)server_info_changed_apply, null);
-        }
-
-        static void
-        client_info_changed_apply(void *user_data)
-        {
-            client_info_changed_timeout = 0U;
-            eventc.category = Purple.prefs_get_string("/plugins/core/eventc/client/category");
-            eventc.rename.begin((obj, res) => {
-                try
-                {
-                    eventc.rename.end(res);
-                }
-                catch ( Eventc.EventcError e )
-                {
-                    GLib.warning(_("Couldn’t change client info: %s"), e.message);
-                    if ( ! eventc.is_connected() )
-                        reconnect();
-            }
-            });
-        }
-
-        static void
-        client_info_changed(string name, Purple.PrefType type, void *val, void *user_data)
-        {
-            if ( client_info_changed_timeout > 0U )
-                Purple.timeout_remove(client_info_changed_timeout);
-            client_info_changed_timeout = Purple.timeout_add_seconds(5, (Purple.SourceFunc)client_info_changed_apply, null);
         }
 
         static void
@@ -337,17 +308,11 @@ namespace PurpleEventc
             Purple.prefs_get_string("/plugins/core/eventc/client/category")
             );
 
-        eventc.mode = Eventc.Connection.Mode.NORMAL;
         eventc.timeout = Purple.prefs_get_int("/plugins/core/eventc/connection/timeout");
 
         server_info_changed_id = Purple.prefs_connect_callback(plugin,
             "/plugins/core/eventc/server",
             (Purple.PrefCallback)Callback.server_info_changed, null
-            );
-
-        client_info_changed_id = Purple.prefs_connect_callback(plugin,
-            "/plugins/core/eventc/client",
-            (Purple.PrefCallback)Callback.client_info_changed, null
             );
 
         timeout_changed_id = Purple.prefs_connect_callback(plugin,
@@ -411,7 +376,6 @@ namespace PurpleEventc
         var conn_handle = Purple.connections_get_handle();
 
         Purple.prefs_disconnect_callback(server_info_changed_id);
-        Purple.prefs_disconnect_callback(client_info_changed_id);
         Purple.prefs_disconnect_callback(timeout_changed_id);
 
         Purple.signal_disconnect(
