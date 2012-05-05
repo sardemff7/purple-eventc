@@ -6,8 +6,11 @@ plugin_LTLIBRARIES =
 
 CLEANFILES =
 
+EXTRA_DIST =
+
 AM_CFLAGS += \
-	-I $(top_builddir)/include/ \
+	-I $(srcdir)/include/ \
+	-I $(builddir)/include/ \
 	-D LOCALEDIR=\"$(localedir)\" \
 	--include config.h
 
@@ -19,6 +22,9 @@ AM_VALAFLAGS += \
 plugin_LTLIBRARIES += \
 	eventc.la
 
+EXTRA_DIST += \
+	src/purple-eventc.sym
+
 eventc_la_VALASOURCES = \
 	src/ui.vala \
 	src/utils.vala \
@@ -26,6 +32,7 @@ eventc_la_VALASOURCES = \
 
 eventc_la_SOURCES = \
 	$(eventc_la_VALASOURCES) \
+	include/purple-custom.h \
 	src/plugin.c
 
 eventc_la_VALAFLAGS = \
