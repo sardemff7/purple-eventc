@@ -73,6 +73,8 @@ AC_SUBST(AM_CFLAGS)
 AC_SUBST(AM_LDFLAGS)
 AC_SUBST(AM_VALAFLAGS)
 
+AC_SUBST(shrext_cmds)
+
 AC_CONFIG_FILES([
     Makefile
     po/Makefile.in
