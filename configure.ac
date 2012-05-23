@@ -56,11 +56,16 @@ AC_SUBST(EVENTD_VALAFLAGS)
 #
 # Check for libpurple
 #
+AC_ARG_WITH(purple-plugindir, AS_HELP_STRING([--with-purple-plugindir=DIR], [Directory for libpurple plugin]), [], with_purple_plugindir=yes)
+case "$with_purple_plugindir" in
+    no|"") AC_MSG_ERROR([*** You must define purple-plugindir]) ;;
+    yes) plugindir="`$PKG_CONFIG --variable=plugindir purple`" ;;
+    *) plugindir="$with_purple_plugindir" ;;
+esac
 PKG_CHECK_MODULES(PURPLE, purple >= 2.6.0)
 PURPLE_VALAFLAGS="--pkg purple-custom"
 AC_SUBST(PURPLE_VALAFLAGS)
 AC_DEFINE_UNQUOTED([PURPLE_DATADIR], ["`pkg-config --variable=datadir purple`"], [libpurple data directory])
-plugindir="`pkg-config --variable=plugindir purple`"
 AC_SUBST(plugindir)
 
 

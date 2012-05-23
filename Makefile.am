@@ -1,3 +1,6 @@
+AM_DISTCHECK_CONFIGURE_FLAGS = \
+	--with-purple-plugindir="$$dc_install_base/$(plugindir)"
+
 ACLOCAL_AMFLAGS = -I m4 ${ACLOCAL_FLAGS}
 AM_MAKEFLAGS = --no-print-directory
 
