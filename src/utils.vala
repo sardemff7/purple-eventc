@@ -100,14 +100,17 @@ namespace PurpleEventc
                 return;
             }
 
-
-            weak Purple.Contact contact = buddy.get_contact();
-            current_events.prepend(contact);
-            event.ended.connect(() => {
-                current_events.remove(contact);
-            });
-
             var event = new Eventd.Event(type);
+
+            if ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/if-no-event") )
+            {
+                weak Purple.Contact contact = buddy.get_contact();
+                current_events.prepend(contact);
+                event.ended.connect(() => {
+                    current_events.remove(contact);
+                });
+            }
+
 
             var l = va_list();
             while ( true )
