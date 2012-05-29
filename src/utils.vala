@@ -103,9 +103,8 @@ namespace PurpleEventc
 
             weak Purple.Contact contact = buddy.get_contact();
             current_events.prepend(contact);
-            Timeout.add(500, () => {
+            event.ended.connect(() => {
                 current_events.remove(contact);
-                return false;
             });
 
             var event = new Eventd.Event(type);
