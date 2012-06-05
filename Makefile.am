@@ -8,8 +8,6 @@ SUBDIRS = po
 
 plugin_LTLIBRARIES =
 
-EXTRA_DIST =
-
 AM_CFLAGS += \
 	-I $(srcdir)/include/ \
 	-I $(builddir)/include/ \
@@ -23,9 +21,6 @@ AM_VALAFLAGS += \
 
 plugin_LTLIBRARIES += \
 	eventc.la
-
-EXTRA_DIST += \
-	src/purple-eventc.sym
 
 eventc_la_VALASOURCES = \
 	src/ui.vala \
@@ -54,7 +49,7 @@ eventc_la_CFLAGS = \
 eventc_la_LDFLAGS = \
 	$(AM_LDFLAGS) \
 	-avoid-version -module \
-	-export-symbols $(srcdir)/src/purple-eventc.sym
+	-export-symbols-regex 'purple_init_(eventc_)?plugin'
 
 eventc_la_LIBADD = \
 	$(PURPLE_LIBS) \
