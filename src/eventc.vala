@@ -90,11 +90,6 @@ namespace PurpleEventc
     public static bool
     load(Purple.Plugin plugin)
     {
-        unowned Purple.Plugin purple_events;
-        purple_events = Purple.plugins_find_with_id("core-sardemff7-purple-events");
-        unowned PurpleEvents.Context context = (PurpleEvents.Context)purple_events.extra;
-        context.connect_handler(plugin.extra);
-
         tries = 0;
 
         eventc = new Eventc.Connection(
@@ -117,12 +112,16 @@ namespace PurpleEventc
 
         connect();
 
+        PurpleEvents.connect_handler((PurpleEvents.Handler)plugin.extra);
+
         return true;
     }
 
     public static bool
     unload(Purple.Plugin plugin)
     {
+        PurpleEvents.disconnect_handler((PurpleEvents.Handler)plugin.extra);
+
         Purple.prefs_disconnect_callback(server_info_changed_id);
         Purple.prefs_disconnect_callback(timeout_changed_id);
 
@@ -144,11 +143,6 @@ namespace PurpleEventc
 
             eventc = null;
         });
-
-        unowned Purple.Plugin purple_events;
-        purple_events = Purple.plugins_find_with_id("core-sardemff7-purple-events");
-        unowned PurpleEvents.Context context = (PurpleEvents.Context)purple_events.extra;
-        context.disconnect_handler(plugin.extra);
 
         return true;
     }

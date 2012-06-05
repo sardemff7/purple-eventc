@@ -23,77 +23,120 @@
 namespace PurpleEventc.Callbacks
 {
     public static void
-    signed_on(Purple.Plugin plugin, Purple.Buddy buddy)
+    signed_on(Purple.Plugin plugin, void *event, Purple.Buddy buddy)
     {
-        Utils.send(buddy, "signed-on");
+        Utils.send(event as Eventd.Event, buddy, "signed-on");
     }
 
     public static void
-    signed_off(Purple.Plugin plugin, Purple.Buddy buddy)
+    signed_off(Purple.Plugin plugin, void *event, Purple.Buddy buddy)
     {
-        Utils.send(buddy, "signed-off");
+        Utils.send(event as Eventd.Event, buddy, "signed-off");
     }
 
     public static void
-    away(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
+    away(Purple.Plugin plugin, void *event, Purple.Buddy buddy, string? message)
     {
         if ( message != null )
-            Utils.send(buddy, "away-message", "message", message);
+            Utils.send(event as Eventd.Event, buddy, "away-message", "message", message);
         else
-            Utils.send(buddy, "away");
+            Utils.send(event as Eventd.Event, buddy, "away");
     }
 
     public static void
-    back(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
+    back(Purple.Plugin plugin, void *event, Purple.Buddy buddy, string? message)
     {
         if ( message != null )
-            Utils.send(buddy, "back-message", "message", message);
+            Utils.send(event as Eventd.Event, buddy, "back-message", "message", message);
         else
-            Utils.send(buddy, "back");
+            Utils.send(event as Eventd.Event, buddy, "back");
     }
 
     public static void
-    status(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
+    status(Purple.Plugin plugin, void *event, Purple.Buddy buddy, string? message)
     {
         if ( message != null )
-            Utils.send(buddy, "change-status-message", "message", message);
+            Utils.send(event as Eventd.Event, buddy, "change-status-message", "message", message);
         else
-            Utils.send(buddy, "remove-status-message");
+            Utils.send(event as Eventd.Event, buddy, "remove-status-message");
     }
 
     public static void
-    special(Purple.Plugin plugin, Purple.Buddy buddy, PurpleEvents.EventSpecialType type, ...)
+    special(Purple.Plugin plugin, void *event, Purple.Buddy buddy, PurpleEvents.EventSpecialType type, ...)
     {
     }
 
     public static void
-    idle(Purple.Plugin plugin, Purple.Buddy buddy)
+    idle(Purple.Plugin plugin, void *event, Purple.Buddy buddy)
     {
-        Utils.send(buddy, "idle");
+        Utils.send(event as Eventd.Event, buddy, "idle");
     }
 
     public static void
-    idle_back(Purple.Plugin plugin, Purple.Buddy buddy)
+    idle_back(Purple.Plugin plugin, void *event, Purple.Buddy buddy)
     {
-        Utils.send(buddy, "back-idle");
+        Utils.send(event as Eventd.Event, buddy, "back-idle");
     }
 
     public static void
-    message(Purple.Plugin plugin, Purple.Buddy buddy, string message)
+    im_message(Purple.Plugin plugin, void *event, Purple.Buddy buddy, string message)
     {
-        Utils.send(buddy, "im-msg",
+        Utils.send(event as Eventd.Event, buddy, "im-msg",
                    "unstripped-message", message.dup(),
                    "message", Purple.markup_strip_html(message)
                   );
     }
 
     public static void
-    action(Purple.Plugin plugin, Purple.Buddy buddy, string message)
+    im_action(Purple.Plugin plugin, void *event, Purple.Buddy buddy, string message)
     {
-        string msg = Purple.markup_strip_html(message);
-        Utils.send(buddy, "im-action",
+        Utils.send(event as Eventd.Event, buddy, "im-action",
                    "unstripped-message", message.dup(),
-                   "message", msg.substring(4)
+                   "message", Purple.markup_strip_html(message).substring(4)
                   );
+    }
+
+    public static void
+    chat_message(Purple.Plugin plugin, void *event, Purple.Conversation conv, Purple.Buddy buddy, string message)
+    {
+        Utils.send(event as Eventd.Event, buddy, "chat-msg",
+                   "unstripped-message", message.dup(),
+                   "message", Purple.markup_strip_html(message)
+                  );
+    }
+
+    public static void
+    chat_action(Purple.Plugin plugin, void *event, Purple.Conversation conv, Purple.Buddy buddy, string message)
+    {
+        Utils.send(event as Eventd.Event, buddy, "chat-action",
+                   "unstripped-message", message.dup(),
+                   "message", Purple.markup_strip_html(message).substring(4)
+                  );
+    }
+
+    public static void
+    end_event(Purple.Plugin plugin, void *_event)
+    {
+        unowned Eventd.Event event = (_event as Eventd.Event);
+        eventc.event_end(event, (obj, res) => {
+            try
+            {
+                eventc.event_end.end(res);
+            }
+            catch ( Eventc.EventcError e )
+            {
+                GLib.warning(_("Error dispatching event: %s"), e.message);
+                try
+                {
+                    /*
+                     * The only error that could be throwed
+                     * here is the one we’re processing
+                     */
+                    if ( ! eventc.is_connected() )
+                        reconnect();
+                }
+                catch ( Eventc.EventcError e ) {}
+            }
+        });
     }
 }

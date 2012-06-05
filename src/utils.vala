@@ -24,11 +24,12 @@ namespace PurpleEventc
 {
     namespace Utils
     {
-        static GLib.List<weak Purple.Contact> current_events;
-
         static void
-        send(Purple.Buddy buddy, string type, ...)
+        send(Eventd.Event? old_event, Purple.Buddy buddy, string type, ...)
         {
+            if ( old_event != null )
+                return;
+
             try
             {
                 if ( ! eventc.is_connected() )
@@ -42,18 +43,6 @@ namespace PurpleEventc
             }
 
             var event = new Eventd.Event(type);
-
-            if ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/if-no-event") )
-            {
-                unowned Purple.Contact contact = buddy.get_contact();
-                if ( current_events.find(contact) != null )
-                    return;
-                current_events.prepend(contact);
-                event.ended.connect(() => {
-                    current_events.remove(contact);
-                });
-            }
-
 
             var l = va_list();
             while ( true )
