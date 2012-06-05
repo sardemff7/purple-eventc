@@ -9,8 +9,6 @@ SUBDIRS = po
 plugin_LTLIBRARIES =
 
 AM_CFLAGS += \
-	-I $(srcdir)/include/ \
-	-I $(builddir)/include/ \
 	-D LOCALEDIR=\"$(localedir)\" \
 	--include config.h
 
@@ -28,6 +26,7 @@ eventc_la_VALASOURCES = \
 	src/eventc.vala
 
 eventc_la_SOURCES = \
+	src/config.h \
 	$(eventc_la_VALASOURCES) \
 	include/purple-custom.h \
 	src/plugin.c
