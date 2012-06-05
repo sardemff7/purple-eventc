@@ -1,15 +1,32 @@
+#
+#  purple-eventc - libpurple plugin client for eventd
+#
+#  Copyright © 2011-2012 Quentin "Sardem FF7" Glidic
+#
+#  This file is part of purple-eventc.
+#
+#  purple-eventc is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation, either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  purple-eventc is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with purple-eventc. If not, see <http://www.gnu.org/licenses/>.
+#
 # French translations for purple-eventc package.
-# Copyright (C) 2011 THE purple-eventc'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the purple-eventc package.
-#  <sardemff7+pidgin@sardemff7.net>, 2011.
 #
 msgid ""
 msgstr ""
 "Project-Id-Version: purple-eventc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-10-29 15:40+0200\n"
+"POT-Creation-Date: 2012-06-05 11:34+0200\n"
 "PO-Revision-Date: 2011-10-29 15:42+0200\n"
-"Last-Translator:  <sardemff7+pidgin@sardemff7.net>\n"
+"Last-Translator: Quentin Glidic <sardemff7+pidgin@sardemff7.net>\n"
 "Language-Team: French\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
@@ -17,38 +34,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../src/eventc.vala:58
-#, c-format
-msgid "Couldn’t change client info: %s"
-msgstr "Impossible de modifier les informations client : %s"
+#: ../src/plugin.c:90
+msgid "Client for eventd"
+msgstr "Client pour eventd"
 
-#: ../src/eventc.vala:201
+#: ../src/plugin.c:91
+msgid "Propagate events to eventd"
+msgstr "Propage les événements à eventd"
+
+#: ../src/plugin.c:92
+msgid "Use eventd to inform the user of events"
+msgstr "Utilise eventd pour informer les utilisateurs des événements"
+
+#: ../src/eventc.vala:70
 #, c-format
 msgid "Error connecting to eventd: %s"
 msgstr "Erreur lors de la connexion à eventd : %s"
 
-#: ../src/eventc.vala:228
-msgid "Propagate events to eventd"
-msgstr "Propage les événements à eventd"
-
-#: ../src/eventc.vala:229
-msgid "Use eventd to inform the user of events"
-msgstr "Utilise eventd pour informer les utilisateurs des événements"
-
-#: ../src/eventc.vala:408
+#: ../src/eventc.vala:143
 #, c-format
 msgid "Error closing connection to eventd: %s"
 msgstr "Erreur lors de la fermeture de la connexion à eventd : %s"
 
-#: ../src/utils.vala:119
-#, c-format
-msgid "Couldn’t load protocol icon file: %s"
-msgstr "Impossible de charger l’icône de protocole : %s"
-
-#: ../src/utils.vala:139
+#: ../src/utils.vala:39 ../src/utils.vala:109
 #, c-format
 msgid "Error dispatching event: %s"
 msgstr "Erreur lors de l’envoi de l’événement : %s"
+
+#: ../src/utils.vala:97
+#, c-format
+msgid "Couldn’t load protocol icon file: %s"
+msgstr "Impossible de charger l’icône de protocole : %s"
 
 #: ../src/ui.vala:34
 msgid "Server:"
@@ -67,85 +83,37 @@ msgid "Client:"
 msgstr "Client :"
 
 #: ../src/ui.vala:58
-msgid "Client type"
-msgstr "Type du client"
+msgid "Category"
+msgstr "Catégorie"
 
-#: ../src/ui.vala:64
-msgid "Client name"
-msgstr "Nom du client"
-
-#: ../src/ui.vala:69
+#: ../src/ui.vala:63
 msgid "Connection:"
 msgstr "Connexion :"
 
-#: ../src/ui.vala:75
+#: ../src/ui.vala:69
 msgid "Timeout (seconds, 0 to disable)"
 msgstr "Délai (en secondes, 0 pour désactiver)"
 
-#: ../src/ui.vala:82
+#: ../src/ui.vala:76
 msgid "Max reconnection tries (-1 to disable, 0 for infinite)"
 msgstr "Tentatives de reconnexion max (-1 pour désactiver, 0 pour l’infini)"
 
-#: ../src/ui.vala:89
+#: ../src/ui.vala:83
 msgid "Retry delay (0-3600 seconds)"
 msgstr "Délai (0-3600 secondes)"
 
-#: ../src/ui.vala:95
-msgid "Events:"
-msgstr "Événements :"
-
-#: ../src/ui.vala:101
-msgid "New messages"
-msgstr "Nouveau messages"
-
-#: ../src/ui.vala:107
-msgid "Buddy signing on"
-msgstr "Connexion d’un contact"
-
-#: ../src/ui.vala:113
-msgid "Buddy signing off"
-msgstr "Déconnexion d’un contact"
-
-#: ../src/ui.vala:119
-msgid "Buddy going away"
-msgstr "Absence d’un contact"
-
-#: ../src/ui.vala:125
-msgid "Buddy going idle"
-msgstr "Inactivité d’un contact"
-
-#: ../src/ui.vala:131
-msgid "Buddy coming back"
-msgstr "Retour d’un contact"
-
-#: ../src/ui.vala:137
-msgid "Status message change (or removal)"
-msgstr "Changement (ou suppression) de message de statut"
-
-#: ../src/ui.vala:142
+#: ../src/ui.vala:89
 msgid "Restrictions:"
 msgstr "Restrictions :"
 
-#: ../src/ui.vala:148
-msgid "Even for a blocked buddy"
-msgstr "Même pour un contact bloqué"
+#: ../src/ui.vala:95
+msgid "Only when no other event exists for a buddy"
+msgstr "Seulement si aucun autre événement n’existe pour un contact"
 
-#: ../src/ui.vala:154
-msgid "Only from new conversation"
-msgstr "Seulement pour les nouvelles conversations"
-
-#: ../src/ui.vala:160
-msgid "Only when available"
-msgstr "Seulement si je suis disponible"
-
-#: ../src/ui.vala:166
+#: ../src/ui.vala:101
 msgid "Do not transmit buddy icon"
-msgstr "Ne pas transmettre d’icône"
+msgstr "Ne pas transmettre l’icône de contact"
 
-#: ../src/ui.vala:227 ../src/ui.vala:236
-msgid "Dispatch to eventd"
-msgstr "Envoyer à eventd"
-
-#: ../src/ui.vala:229 ../src/ui.vala:238
-msgid "Do not dispatch to eventd"
-msgstr "Ne pas envoyer à eventd"
+#: ../src/ui.vala:107
+msgid "Do not transmit protocol icon"
+msgstr "Ne pas transmettre l’icône de protocole"
