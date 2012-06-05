@@ -22,63 +22,63 @@
 
 namespace PurpleEventc.Callbacks
 {
-    static void
+    public static void
     signed_on(Purple.Plugin plugin, Purple.Buddy buddy)
     {
         Utils.send(buddy, "signed-on");
     }
 
-    static void
+    public static void
     signed_off(Purple.Plugin plugin, Purple.Buddy buddy)
     {
         Utils.send(buddy, "signed-off");
     }
 
-    static void
+    public static void
     away(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
     {
         if ( message != null )
-            Utils.send(buddy, "away-message", "mesage", message);
+            Utils.send(buddy, "away-message", "message", message);
         else
             Utils.send(buddy, "away");
     }
 
-    static void
+    public static void
     back(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
     {
         if ( message != null )
-            Utils.send(buddy, "back-message", "mesage", message);
+            Utils.send(buddy, "back-message", "message", message);
         else
             Utils.send(buddy, "back");
     }
 
-    static void
+    public static void
     status(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
     {
         if ( message != null )
-            Utils.send(buddy, "change-status-message", "mesage", message);
+            Utils.send(buddy, "change-status-message", "message", message);
         else
             Utils.send(buddy, "remove-status-message");
     }
 
-    static void
+    public static void
     special(Purple.Plugin plugin, Purple.Buddy buddy, PurpleEvents.EventSpecialType type, ...)
     {
     }
 
-    static void
+    public static void
     idle(Purple.Plugin plugin, Purple.Buddy buddy)
     {
         Utils.send(buddy, "idle");
     }
 
-    static void
+    public static void
     idle_back(Purple.Plugin plugin, Purple.Buddy buddy)
     {
         Utils.send(buddy, "back-idle");
     }
 
-    static void
+    public static void
     message(Purple.Plugin plugin, Purple.Buddy buddy, string message)
     {
         Utils.send(buddy, "im-msg",
@@ -87,7 +87,7 @@ namespace PurpleEventc.Callbacks
                   );
     }
 
-    static void
+    public static void
     action(Purple.Plugin plugin, Purple.Buddy buddy, string message)
     {
         string msg = Purple.markup_strip_html(message);
