@@ -250,7 +250,7 @@ namespace PurpleEventc
         retry_source = Purple.timeout_add_seconds(Purple.prefs_get_int("/plugins/core/eventc/connection/retry-delay"), connect, null);
     }
 
-    static void
+    public static void
     init(Purple.Plugin handle, Purple.PluginInfo info)
     {
         plugin = handle;
@@ -294,7 +294,7 @@ namespace PurpleEventc
         Purple.prefs_add_bool("/plugins/core/eventc/restrictions/no-protocol-icon", false);
     }
 
-    static bool
+    public static bool
     load(Purple.Plugin plugin)
     {
         var conv_handle = Purple.conversations_get_handle();
@@ -369,7 +369,7 @@ namespace PurpleEventc
         return true;
     }
 
-    static bool
+    public static bool
     unload(Purple.Plugin plugin)
     {
         var conv_handle = Purple.conversations_get_handle();
