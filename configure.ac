@@ -61,8 +61,14 @@ esac
 PKG_CHECK_MODULES(PURPLE, purple >= 2.6.0)
 PURPLE_VALAFLAGS="--pkg purple-custom"
 AC_SUBST(PURPLE_VALAFLAGS)
-AC_DEFINE_UNQUOTED([PURPLE_DATADIR], ["`pkg-config --variable=datadir purple`"], [libpurple data directory])
 AC_SUBST(plugindir)
+
+#
+# Check for purple-events
+#
+PKG_CHECK_MODULES(PURPLE_EVENTS, [purple-events])
+PURPLE_EVENTS_VALAFLAGS="--pkg purple-events"
+AC_SUBST(PURPLE_EVENTS_VALAFLAGS)
 
 
 AC_ARG_ENABLE(debug, AS_HELP_STRING([--enable-debug], [Enable debug]), [], enable_debug=no)

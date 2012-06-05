@@ -23,16 +23,17 @@ plugin_LTLIBRARIES += \
 eventc_la_VALASOURCES = \
 	src/ui.vala \
 	src/utils.vala \
+	src/callbacks.vala \
 	src/eventc.vala
 
 eventc_la_SOURCES = \
 	src/config.h \
 	$(eventc_la_VALASOURCES) \
-	include/purple-custom.h \
 	src/plugin.c
 
 eventc_la_VALAFLAGS = \
 	$(AM_VALAFLAGS) \
+	$(PURPLE_EVENTS_VALAFLAGS) \
 	$(PURPLE_VALAFLAGS) \
 	$(EVENTD_VALAFLAGS) \
 	$(GIO_VALAFLAGS) \
@@ -40,6 +41,7 @@ eventc_la_VALAFLAGS = \
 
 eventc_la_CFLAGS = \
 	$(AM_CFLAGS) \
+	$(PURPLE_EVENTS_CFLAGS) \
 	$(PURPLE_CFLAGS) \
 	$(EVENTD_CFLAGS) \
 	$(GIO_CFLAGS) \
@@ -51,6 +53,7 @@ eventc_la_LDFLAGS = \
 	-export-symbols-regex 'purple_init_(eventc_)?plugin'
 
 eventc_la_LIBADD = \
+	$(PURPLE_EVENTS_LIBS) \
 	$(PURPLE_LIBS) \
 	$(EVENTD_LIBS) \
 	$(GIO_LIBS) \

@@ -26,71 +26,12 @@ namespace PurpleEventc
     {
         static GLib.List<weak Purple.Contact> current_events;
 
-        static unowned string
-        get_best_buddy_name(Purple.Buddy buddy)
-        {
-            unowned string name = null;
-
-            if ( buddy.get_contact_alias() != null )
-                name = buddy.get_contact_alias();
-            else if ( buddy.get_alias() != null )
-                name = buddy.get_alias();
-            else if ( buddy.get_server_alias() != null )
-                name = buddy.get_server_alias();
-            else
-                name = buddy.get_name();
-
-            return name;
-        }
-
-        static bool
-        is_buddy_dispatch(Purple.Buddy buddy)
-        {
-            #if DEBUG
-            return true;
-            #endif
-
-            unowned Purple.Account account = buddy.get_account();
-            unowned Purple.Contact contact = buddy.get_contact();
-
-            if ( ( just_signed_on_accounts.find(account) != null )
-                 || ( current_events.find(contact) != null ) )
-                return false;
-
-            if ( ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/only-available") )
-            && ( ! account.get_active_status().is_available() ) )
-                return false;
-
-            unowned string name = buddy.get_name();
-
-            if ( ( ! Purple.privacy_check(account, name) )
-                && ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/blocked") ) )
-                return false;
-
-            unowned Purple.Conversation conv = Purple.find_conversation_with_account(Purple.ConversationType.IM, name, account);
-            if ( ( conv != null )
-                && (
-                    ( conv.has_focus() )
-                    || ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/new-conv-only") )
-                ) )
-                return false;
-
-            unowned Purple.BlistNode contact_node = (Purple.BlistNode *)(&(contact.node));
-            int deactivate = contact_node.get_int("eventc/deactivate");
-            if ( deactivate == 0 )
-            {
-                unowned Purple.BlistNode group = (Purple.BlistNode *)(&(buddy.get_group().node));
-                deactivate = group.get_int("eventc/deactivate");
-            }
-            return ( deactivate != 1 );
-        }
-
         static void
         send(Purple.Buddy buddy, string type, ...)
         {
             try
             {
-                if ( ( ! eventc.is_connected() ) || ( ! is_buddy_dispatch(buddy) ) )
+                if ( ! eventc.is_connected() )
                     return;
             }
             catch ( Eventc.EventcError e )
@@ -104,7 +45,9 @@ namespace PurpleEventc
 
             if ( Purple.prefs_get_bool("/plugins/core/eventc/restrictions/if-no-event") )
             {
-                weak Purple.Contact contact = buddy.get_contact();
+                unowned Purple.Contact contact = buddy.get_contact();
+                if ( current_events.find(contact) != null )
+                    return;
                 current_events.prepend(contact);
                 event.ended.connect(() => {
                     current_events.remove(contact);
@@ -123,27 +66,22 @@ namespace PurpleEventc
                     event.add_data(key, val);
             }
 
-            event.add_data("buddy-name", get_best_buddy_name(buddy));
+            event.add_data("buddy-name", PurpleEvents.Utils.buddy_get_best_name(buddy));
 
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-buddy-icon") )
             {
                 var buddy_icon = buddy.get_icon();
                 if ( buddy_icon != null )
-                    event.add_data("buddy-icon", GLib.Base64.encode(buddy_icon.get_data()));
+                    event.add_data("buddy-icon", GLib.Base64.encode(PurpleCustom.buddy_icon_get_data(buddy_icon)));
             }
 
-            unowned Purple.PluginProtocolInfo info = Purple.find_prpl(buddy.account.get_protocol_id()).get_protocol_info();
-            string protoname = null;
-            if ( info.list_icon != null )
-                protoname = info.list_icon(buddy.account, null);
+            unowned string protoname = PurpleEvents.Utils.buddy_get_protocol(buddy);
 
             event.add_data("protocol-name", protoname);
 
-            if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-protocol-icon") )
+            if ( ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-protocol-icon") ) && ( protoname != null ) )
             {
-                string filename = null;
-                if ( protoname != null )
-                    filename = GLib.Path.build_filename(Config.PURPLE_DATADIR, "pixmaps", "pidgin", "protocols", "scalable", protoname + ".svg");
+                string filename = PurpleEvents.Utils.protocol_get_icon_uri(protoname, PurpleEvents.UtilsIconFormat.SVG).substring(7);
 
                 if ( ( filename != null ) && ( GLib.FileUtils.test(filename, GLib.FileTest.IS_REGULAR) ) )
                 {
