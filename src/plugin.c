@@ -59,7 +59,7 @@ static PurplePluginInfo _purple_eventc_info = {
     .dependencies   = NULL,
     .priority       = PURPLE_PRIORITY_DEFAULT,
 
-    .id             = PACKAGE_NAME,
+    .id             = "core-sardemff7-" PACKAGE_NAME,
     .name           = NULL,
     .version        = PACKAGE_VERSION,
     .summary        = NULL,
@@ -91,7 +91,7 @@ _purple_eventc_init(PurplePlugin *plugin)
     _purple_eventc_info.summary = _("Propagate events to eventd");
     _purple_eventc_info.description = _("Use eventd to inform the user of events");
 
-    _purple_eventc_info.dependencies = g_list_prepend(_purple_eventc_info.dependencies, "purple-events");
+    _purple_eventc_info.dependencies = g_list_prepend(_purple_eventc_info.dependencies, "core-sardemff7-purple-events");
 
     PurpleEventsHandler *handler;
 

@@ -92,7 +92,7 @@ namespace PurpleEventc
     {
         unowned Purple.Plugin purple_events;
 
-        purple_events = Purple.plugins_find_with_id("purple-events");
+        purple_events = Purple.plugins_find_with_id("core-sardemff7-purple-events");
         unowned PurpleEvents.Context context = (PurpleEvents.Context)purple_events.extra;
         context.connect_handler(plugin.extra);
 
