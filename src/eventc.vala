@@ -91,7 +91,6 @@ namespace PurpleEventc
     load(Purple.Plugin plugin)
     {
         unowned Purple.Plugin purple_events;
-
         purple_events = Purple.plugins_find_with_id("core-sardemff7-purple-events");
         unowned PurpleEvents.Context context = (PurpleEvents.Context)purple_events.extra;
         context.connect_handler(plugin.extra);
@@ -145,6 +144,11 @@ namespace PurpleEventc
 
             eventc = null;
         });
+
+        unowned Purple.Plugin purple_events;
+        purple_events = Purple.plugins_find_with_id("core-sardemff7-purple-events");
+        unowned PurpleEvents.Context context = (PurpleEvents.Context)purple_events.extra;
+        context.disconnect_handler(plugin.extra);
 
         return true;
     }
