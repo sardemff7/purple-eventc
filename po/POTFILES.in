@@ -1,4 +1,5 @@
 src/plugin.c
+src/callbacks.vala
 src/eventc.vala
 src/utils.vala
 src/ui.vala
