@@ -24,25 +24,29 @@ namespace PurpleEventc
 {
     namespace Utils
     {
-        static void
-        send(Eventd.Event? old_event, Purple.Buddy buddy, string type, ...)
+        static Eventd.Event?
+        send(Purple.Plugin plugin, Eventd.Event? old_event, Purple.Buddy buddy, string type, void *attach, ...)
         {
             if ( old_event != null )
-                return;
+                return null;
 
             try
             {
                 if ( ! eventc.is_connected() )
-                    return;
+                    return null;
             }
             catch ( Eventc.EventcError e )
             {
                 GLib.warning(_("Error dispatching event: %s"), e.message);
                 reconnect();
-                return;
+                return null;
             }
 
             var event = new Eventd.Event(type);
+            event.ended.connect(() => {
+                unowned PurpleEvents.Handler handler = (PurpleEvents.Handler)plugin.extra;
+                handler.remove_event(( attach != null ) ? attach : buddy.get_contact(), event);
+            });
 
             var l = va_list();
             while ( true )
@@ -108,6 +112,7 @@ namespace PurpleEventc
                     catch ( Eventc.EventcError e ) {}
                 }
             });
+            return event;
         }
     }
 }
