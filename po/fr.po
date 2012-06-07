@@ -24,7 +24,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: purple-eventc 0.1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2012-06-05 11:34+0200\n"
+"POT-Creation-Date: 2012-06-07 20:23+0200\n"
 "PO-Revision-Date: 2011-10-29 15:42+0200\n"
 "Last-Translator: Quentin Glidic <sardemff7+pidgin@sardemff7.net>\n"
 "Language-Team: French\n"
@@ -34,34 +34,34 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: ../src/plugin.c:90
+#: ../src/plugin.c:93
 msgid "Client for eventd"
 msgstr "Client pour eventd"
 
-#: ../src/plugin.c:91
+#: ../src/plugin.c:94
 msgid "Propagate events to eventd"
 msgstr "Propage les événements à eventd"
 
-#: ../src/plugin.c:92
+#: ../src/plugin.c:95
 msgid "Use eventd to inform the user of events"
 msgstr "Utilise eventd pour informer les utilisateurs des événements"
+
+#: ../src/callbacks.vala:128 ../src/utils.vala:40 ../src/utils.vala:98
+#, c-format
+msgid "Error dispatching event: %s"
+msgstr "Erreur lors de l’envoi de l’événement : %s"
 
 #: ../src/eventc.vala:70
 #, c-format
 msgid "Error connecting to eventd: %s"
 msgstr "Erreur lors de la connexion à eventd : %s"
 
-#: ../src/eventc.vala:143
+#: ../src/eventc.vala:141
 #, c-format
 msgid "Error closing connection to eventd: %s"
 msgstr "Erreur lors de la fermeture de la connexion à eventd : %s"
 
-#: ../src/utils.vala:39 ../src/utils.vala:109
-#, c-format
-msgid "Error dispatching event: %s"
-msgstr "Erreur lors de l’envoi de l’événement : %s"
-
-#: ../src/utils.vala:97
+#: ../src/utils.vala:86
 #, c-format
 msgid "Couldn’t load protocol icon file: %s"
 msgstr "Impossible de charger l’icône de protocole : %s"
@@ -107,13 +107,9 @@ msgid "Restrictions:"
 msgstr "Restrictions :"
 
 #: ../src/ui.vala:95
-msgid "Only when no other event exists for a buddy"
-msgstr "Seulement si aucun autre événement n’existe pour un contact"
-
-#: ../src/ui.vala:101
 msgid "Do not transmit buddy icon"
 msgstr "Ne pas transmettre l’icône de contact"
 
-#: ../src/ui.vala:107
+#: ../src/ui.vala:101
 msgid "Do not transmit protocol icon"
 msgstr "Ne pas transmettre l’icône de protocole"
