@@ -136,7 +136,6 @@ _purple_eventc_init(PurplePlugin *plugin)
     purple_prefs_add_int("/plugins/core/eventc/connection/retry-delay", 10);
 
     purple_prefs_add_none("/plugins/core/eventc/restrictions");
-    purple_prefs_add_bool("/plugins/core/eventc/restrictions/if-no-event", TRUE);
     purple_prefs_add_bool("/plugins/core/eventc/restrictions/no-buddy-icon", FALSE);
     purple_prefs_add_bool("/plugins/core/eventc/restrictions/no-protocol-icon", FALSE);
 }

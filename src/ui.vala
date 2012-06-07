@@ -91,12 +91,6 @@ namespace PurpleEventc
             frame->add(pref);
 
             pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/restrictions/if-no-event",
-                _("Only when no other event exists for a buddy")
-                );
-            frame->add(pref);
-
-            pref = new Purple.PluginPref.with_name_and_label(
                 "/plugins/core/eventc/restrictions/no-buddy-icon",
                 _("Do not transmit buddy icon")
                 );
