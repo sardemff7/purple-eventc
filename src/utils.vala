@@ -25,7 +25,7 @@ namespace PurpleEventc
     namespace Utils
     {
         static Eventd.Event?
-        send(Purple.Plugin plugin, Eventd.Event? old_event, Purple.Buddy buddy, string type, void *attach, ...)
+        send(Purple.Plugin *plugin, Eventd.Event? old_event, Purple.Buddy *buddy, string type, void *attach, ...)
         {
             if ( old_event != null )
                 return null;
@@ -44,8 +44,8 @@ namespace PurpleEventc
 
             var event = new Eventd.Event(type);
             event.ended.connect(() => {
-                unowned PurpleEvents.Handler handler = (PurpleEvents.Handler)plugin.extra;
-                handler.remove_event(( attach != null ) ? attach : buddy.get_contact(), event);
+                unowned PurpleEvents.Handler handler = (PurpleEvents.Handler)plugin->extra;
+                handler.remove_event(( attach != null ) ? attach : buddy->get_contact(), event);
             });
 
             var l = va_list();
@@ -63,7 +63,7 @@ namespace PurpleEventc
 
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-buddy-icon") )
             {
-                var buddy_icon = buddy.get_icon();
+                var buddy_icon = buddy->get_icon();
                 if ( buddy_icon != null )
                     event.add_data("buddy-icon", GLib.Base64.encode(PurpleCustom.buddy_icon_get_data(buddy_icon)));
             }
