@@ -78,11 +78,10 @@ namespace PurpleEventc
 
                 if ( ( filename != null ) && ( GLib.FileUtils.test(filename, GLib.FileTest.IS_REGULAR) ) )
                 {
-                    var file = GLib.File.new_for_path(filename);
                     try
                     {
                         uint8[] protocol_icon_data;
-                        file.load_contents(null, out protocol_icon_data, null);
+                        GLib.FileUtils.get_data(filename, out protocol_icon_data);
                         event.add_data("protocol-icon", GLib.Base64.encode(protocol_icon_data));
                     }
                     catch ( GLib.Error e )
