@@ -36,7 +36,6 @@ namespace PurpleEventc
     {
         server_info_changed_timeout = 0U;
         eventc.host = Purple.prefs_get_string("/plugins/core/eventc/server/host");
-        eventc.port = (uint16)Purple.prefs_get_int("/plugins/core/eventc/server/port");
         connect();
         return false;
     }
@@ -94,7 +93,6 @@ namespace PurpleEventc
 
         eventc = new Eventc.Connection(
             Purple.prefs_get_string("/plugins/core/eventc/server/host"),
-            (uint16)Purple.prefs_get_int("/plugins/core/eventc/server/port"),
             Purple.prefs_get_string("/plugins/core/eventc/client/category")
             );
 
