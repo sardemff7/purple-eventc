@@ -25,9 +25,14 @@ IT_PROG_INTLTOOL([0.40.0])
 AC_PROG_INSTALL
 
 
+glib_min_major="2"
+glib_min_minor="28"
+glib_min_version="${glib_min_major}.${glib_min_minor}"
+
+
 AM_CFLAGS="-Wall -Wextra -Wno-unused-parameter"
 AM_LDFLAGS=""
-AM_VALAFLAGS=""
+AM_VALAFLAGS="--target-glib=${glib_min_version}"
 
 #
 # Check for glib-2.0
@@ -35,6 +40,7 @@ AM_VALAFLAGS=""
 PKG_CHECK_MODULES(GLIB, glib-2.0)
 GLIB_VALAFLAGS="--pkg glib-2.0"
 AC_SUBST(GLIB_VALAFLAGS)
+AC_DEFINE_UNQUOTED([GLIB_VERSION_MIN_REQUIRED], [(G_ENCODE_VERSION(${glib_min_major},${glib_min_minor}))], [The lower GLib version supported])
 #
 # Check for gio-2.0
 #
