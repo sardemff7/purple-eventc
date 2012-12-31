@@ -28,7 +28,7 @@ AC_PROG_INSTALL
 glib_min_major="2"
 glib_min_minor="28"
 glib_min_version="${glib_min_major}.${glib_min_minor}"
-
+purple_events_min_version=0.3
 
 AM_CFLAGS="-Wall -Wextra -Wno-unused-parameter"
 AM_LDFLAGS=""
@@ -37,7 +37,7 @@ AM_VALAFLAGS="--target-glib=${glib_min_version}"
 #
 # Check for glib-2.0
 #
-PKG_CHECK_MODULES(GLIB, glib-2.0)
+PKG_CHECK_MODULES(GLIB, glib-2.0 >= $glib_min_version)
 GLIB_VALAFLAGS="--pkg glib-2.0"
 AC_SUBST(GLIB_VALAFLAGS)
 AC_DEFINE_UNQUOTED([GLIB_VERSION_MIN_REQUIRED], [(G_ENCODE_VERSION(${glib_min_major},${glib_min_minor}))], [The lower GLib version supported])
@@ -72,7 +72,7 @@ AC_SUBST(plugindir)
 #
 # Check for purple-events
 #
-PKG_CHECK_MODULES(PURPLE_EVENTS, [purple-events])
+PKG_CHECK_MODULES(PURPLE_EVENTS, [purple-events >= $purple_events_min_version])
 PURPLE_EVENTS_VALAFLAGS="--pkg purple-events"
 AC_SUBST(PURPLE_EVENTS_VALAFLAGS)
 

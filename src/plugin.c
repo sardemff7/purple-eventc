@@ -42,10 +42,8 @@ gpointer purple_eventc_callbacks_status(PurplePlugin *plugin, gpointer event, Pu
 gpointer purple_eventc_callbacks_special(PurplePlugin *plugin, gpointer event, PurpleBuddy *buddy, PurpleEventsEventSpecialType type, ...);
 gpointer purple_eventc_callbacks_idle(PurplePlugin *plugin, gpointer event, PurpleBuddy *buddy);
 gpointer purple_eventc_callbacks_idle_back(PurplePlugin *plugin, gpointer event, PurpleBuddy *buddy);
-gpointer purple_eventc_callbacks_im_message(PurplePlugin *plugin, gpointer event, PurpleBuddy *buddy, const gchar *message);
-gpointer purple_eventc_callbacks_im_action(PurplePlugin *plugin, gpointer event, PurpleBuddy *buddy, const gchar *message);
-gpointer purple_eventc_callbacks_chat_message(PurplePlugin *plugin, gpointer event, PurpleConversation *conv, PurpleBuddy *buddy, const gchar *message);
-gpointer purple_eventc_callbacks_chat_action(PurplePlugin *plugin, gpointer event, PurpleConversation *conv, PurpleBuddy *buddy, const gchar *message);
+gpointer purple_eventc_callbacks_im_message(PurplePlugin *plugin, gpointer event, PurpleEventsMessageType type, PurpleBuddy *buddy, const gchar *sender, const gchar *message);
+gpointer purple_eventc_callbacks_chat_message(PurplePlugin *plugin, gpointer event, PurpleEventsMessageType type, PurpleConversation *conv, PurpleBuddy *buddy, const gchar *sender, const gchar *message);
 void purple_eventc_callbacks_end_event(PurplePlugin *plugin, gpointer event);
 
 static PurplePluginUiInfo _purple_eventc_ui_info = {
@@ -114,10 +112,7 @@ _purple_eventc_init(PurplePlugin *plugin)
     purple_events_handler_add_idle_back_callback(handler, purple_eventc_callbacks_idle_back);
 
     purple_events_handler_add_im_message_callback(handler, purple_eventc_callbacks_im_message);
-    purple_events_handler_add_im_action_callback(handler, purple_eventc_callbacks_im_action);
-
     purple_events_handler_add_chat_message_callback(handler, purple_eventc_callbacks_chat_message);
-    purple_events_handler_add_chat_action_callback(handler, purple_eventc_callbacks_chat_action);
 
     purple_events_handler_add_end_event_callback(handler, purple_eventc_callbacks_end_event);
 

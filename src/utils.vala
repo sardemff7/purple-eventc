@@ -24,40 +24,33 @@ namespace PurpleEventc
 {
     namespace Utils
     {
-        static Eventd.Event?
-        send(Purple.Plugin *plugin, Eventd.Event? old_event, Purple.Buddy *buddy, string type, void *attach, ...)
+        static bool
+        check_dispatch(Eventd.Event? old_event)
         {
             if ( old_event != null )
-                return null;
+                return false;
 
             try
             {
                 if ( ! eventc.is_connected() )
-                    return null;
+                    return false;
             }
             catch ( Eventc.EventcError e )
             {
                 GLib.warning(_("Error dispatching event: %s"), e.message);
                 reconnect();
-                return null;
+                return false;
             }
+            return true;
+        }
+
+        static Eventd.Event?
+        send_buddy_event(Purple.Plugin *plugin, Eventd.Event? old_event, Purple.Buddy *buddy, string type, void *attach, ...)
+        {
+            if ( ! check_dispatch(old_event) )
+                return null;
 
             var event = new Eventd.Event(type);
-            event.ended.connect(() => {
-                unowned PurpleEvents.Handler handler = (PurpleEvents.Handler)plugin->extra;
-                handler.remove_event(( attach != null ) ? attach : buddy->get_contact(), event);
-            });
-
-            var l = va_list();
-            while ( true )
-            {
-                string? key = l.arg();
-                if ( key == null )
-                    break;
-                string? val = l.arg();
-                if ( val != null )
-                    event.add_data(key, val);
-            }
 
             event.add_data("buddy-name", PurpleEvents.Utils.buddy_get_best_name(buddy));
 
@@ -89,6 +82,38 @@ namespace PurpleEventc
                         GLib.warning(_("Couldn’t load protocol icon file: %s"), e.message);
                     }
                 }
+            }
+
+            var data = va_list();
+            return send_event_internal(plugin, event, data, ( attach != null ) ? attach : buddy->get_contact());
+        }
+
+        static Eventd.Event?
+        send_event(Purple.Plugin *plugin, Eventd.Event? old_event, string type, void *attach, ...)
+        {
+            if ( ! check_dispatch(old_event) )
+                return null;
+
+            var data = va_list();
+            return send_event_internal(plugin, new Eventd.Event(type), data, attach);
+        }
+
+        static Eventd.Event?
+        send_event_internal(Purple.Plugin *plugin, Eventd.Event event, va_list data, void *attach)
+        {
+            event.ended.connect(() => {
+                unowned PurpleEvents.Handler handler = (PurpleEvents.Handler)plugin->extra;
+                handler.remove_event(attach, event);
+            });
+
+            while ( true )
+            {
+                string? key = data.arg();
+                if ( key == null )
+                    break;
+                string? val = data.arg();
+                if ( val != null )
+                    event.add_data(key, val);
             }
 
             eventc.event.begin(event, (obj, res) => {
