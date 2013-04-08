@@ -45,12 +45,12 @@ namespace PurpleEventc
         }
 
         static Eventd.Event?
-        send_buddy_event(Purple.Plugin *plugin, Eventd.Event? old_event, Purple.Buddy *buddy, string type, void *attach, ...)
+        send_buddy_event(Purple.Plugin *plugin, Eventd.Event? old_event, Purple.Buddy *buddy, string category, string type, void *attach, ...)
         {
             if ( ! check_dispatch(old_event) )
                 return null;
 
-            var event = new Eventd.Event(type);
+            var event = new Eventd.Event(category, type);
 
             event.add_data("buddy-name", PurpleEvents.Utils.buddy_get_best_name(buddy));
 
@@ -89,13 +89,13 @@ namespace PurpleEventc
         }
 
         static Eventd.Event?
-        send_event(Purple.Plugin *plugin, Eventd.Event? old_event, string type, void *attach, ...)
+        send_event(Purple.Plugin *plugin, Eventd.Event? old_event, string category, string type, void *attach, ...)
         {
             if ( ! check_dispatch(old_event) )
                 return null;
 
             var data = va_list();
-            return send_event_internal(plugin, new Eventd.Event(type), data, attach);
+            return send_event_internal(plugin, new Eventd.Event(category, type), data, attach);
         }
 
         static Eventd.Event?
@@ -116,26 +116,24 @@ namespace PurpleEventc
                     event.add_data(key, val);
             }
 
-            eventc.event.begin(event, (obj, res) => {
+            try
+            {
+                eventc.event(event);
+            }
+            catch ( Eventc.EventcError e )
+            {
+                GLib.warning(_("Error dispatching event: %s"), e.message);
                 try
                 {
-                    eventc.event.end(res);
+                    /*
+                     * The only error that could be throwed
+                     * here is the one we’re processing
+                     */
+                    if ( ! eventc.is_connected() )
+                        reconnect();
                 }
-                catch ( Eventc.EventcError e )
-                {
-                    GLib.warning(_("Error dispatching event: %s"), e.message);
-                    try
-                    {
-                        /*
-                         * The only error that could be throwed
-                         * here is the one we’re processing
-                         */
-                        if ( ! eventc.is_connected() )
-                            reconnect();
-                    }
-                    catch ( Eventc.EventcError e ) {}
-                }
-            });
+                catch ( Eventc.EventcError e ) {}
+            }
             return event;
         }
     }

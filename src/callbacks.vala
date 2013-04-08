@@ -25,40 +25,31 @@ namespace PurpleEventc.Callbacks
     public static Eventd.Event?
     signed_on(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "signed-on", null);
+        return Utils.send_buddy_event(plugin, event, buddy, "presence", "signed-on", null);
     }
 
     public static Eventd.Event?
     signed_off(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "signed-off", null);
+        return Utils.send_buddy_event(plugin, event, buddy, "presence", "signed-off", null);
     }
 
     public static Eventd.Event?
     away(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, string? message)
     {
-        if ( message != null )
-            return Utils.send_buddy_event(plugin, event, buddy, "away-message", null, "message", message);
-        else
-            return Utils.send_buddy_event(plugin, event, buddy, "away", null);
+        return Utils.send_buddy_event(plugin, buddy, "presence", "away", null, "message", message);
     }
 
     public static Eventd.Event?
     back(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, string? message)
     {
-        if ( message != null )
-            return Utils.send_buddy_event(plugin, event, buddy, "back-message", null, "message", message);
-        else
-            return Utils.send_buddy_event(plugin, event, buddy, "back", null);
+        return Utils.send_buddy_event(plugin, buddy, "presence", "back", null, "message", message);
     }
 
     public static Eventd.Event?
     status(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, string? message)
     {
-        if ( message != null )
-            return Utils.send_buddy_event(plugin, event, buddy, "change-status-message", null, "message", message);
-        else
-            return Utils.send_buddy_event(plugin, event, buddy, "remove-status-message", null);
+        return Utils.send_buddy_event(plugin, buddy, "presence", "message", null, "message", message);
     }
 
     public static Eventd.Event?
@@ -70,13 +61,13 @@ namespace PurpleEventc.Callbacks
     public static Eventd.Event?
     idle(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "idle", null);
+        return Utils.send_buddy_event(plugin, event, buddy, "presence", "idle", null);
     }
 
     public static Eventd.Event?
     idle_back(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "back-idle", null);
+        return Utils.send_buddy_event(plugin, event, buddy, "presence", "idle-back", null);
     }
 
     public static Eventd.Event?
@@ -87,25 +78,25 @@ namespace PurpleEventc.Callbacks
         switch ( type )
         {
         case PurpleEvents.MessageType.NORMAL:
-            name = "im-msg";
+            name = "received";
             msg = Purple.markup_strip_html(message);
         break;
         case PurpleEvents.MessageType.HIGHLIGHT:
-            name = "im-highlight";
+            name = "highlight";
             msg = Purple.markup_strip_html(message);
         break;
         case PurpleEvents.MessageType.ACTION:
-            name = "im-action";
+            name = "action";
             msg = Purple.markup_strip_html(message).substring(4);
         break;
         }
         if ( buddy != null )
-            return Utils.send_buddy_event(plugin, event, buddy, name, null,
+            return Utils.send_buddy_event(plugin, event, buddy, "im", name, null,
                        "unstripped-message", message.dup(),
                        "message", msg
                       );
         else
-            return Utils.send_event(plugin, event, name, null,
+            return Utils.send_event(plugin, event, "im", name, null,
                        "buddy-name", sender,
                        "unstripped-message", message.dup(),
                        "message", msg
@@ -120,26 +111,26 @@ namespace PurpleEventc.Callbacks
         switch ( type )
         {
         case PurpleEvents.MessageType.NORMAL:
-            name = "chat-msg";
+            name = "received";
             msg = Purple.markup_strip_html(message);
         break;
         case PurpleEvents.MessageType.HIGHLIGHT:
-            name = "chat-highlight";
+            name = "highlight";
             msg = Purple.markup_strip_html(message);
         break;
         case PurpleEvents.MessageType.ACTION:
-            name = "chat-action";
+            name = "action";
             msg = Purple.markup_strip_html(message).substring(4);
         break;
         }
 
         if ( buddy != null )
-            return Utils.send_buddy_event(plugin, event, buddy, name, null,
+            return Utils.send_buddy_event(plugin, event, buddy, "chat", name, null,
                        "unstripped-message", message.dup(),
                        "message", msg
                       );
         else
-            return Utils.send_event(plugin, event, name, null,
+            return Utils.send_event(plugin, event, "chat", name, null,
                        "buddy-name", sender,
                        "unstripped-message", message.dup(),
                        "message", msg
@@ -149,25 +140,23 @@ namespace PurpleEventc.Callbacks
     public static void
     end_event(Purple.Plugin plugin, owned Eventd.Event event)
     {
-        eventc.event_end(event, (obj, res) => {
+        try
+        {
+            eventc.event_end(event);
+        }
+        catch ( Eventc.EventcError e )
+        {
+            GLib.warning(_("Error dispatching event: %s"), e.message);
             try
             {
-                eventc.event_end.end(res);
+                /*
+                 * The only error that could be throwed
+                 * here is the one we’re processing
+                 */
+                if ( ! eventc.is_connected() )
+                    reconnect();
             }
-            catch ( Eventc.EventcError e )
-            {
-                GLib.warning(_("Error dispatching event: %s"), e.message);
-                try
-                {
-                    /*
-                     * The only error that could be throwed
-                     * here is the one we’re processing
-                     */
-                    if ( ! eventc.is_connected() )
-                        reconnect();
-                }
-                catch ( Eventc.EventcError e ) {}
-            }
-        });
+            catch ( Eventc.EventcError e ) {}
+        }
     }
 }

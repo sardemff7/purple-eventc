@@ -91,10 +91,7 @@ namespace PurpleEventc
     {
         tries = 0;
 
-        eventc = new Eventc.Connection(
-            Purple.prefs_get_string("/plugins/core/eventc/server/host"),
-            Purple.prefs_get_string("/plugins/core/eventc/client/category")
-            );
+        eventc = new Eventc.Connection(Purple.prefs_get_string("/plugins/core/eventc/server/host"));
 
         eventc.timeout = Purple.prefs_get_int("/plugins/core/eventc/connection/timeout");
 
