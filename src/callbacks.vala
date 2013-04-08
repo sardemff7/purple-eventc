@@ -22,56 +22,50 @@
 
 namespace PurpleEventc.Callbacks
 {
-    public static Eventd.Event?
-    signed_on(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
+    public static void
+    signed_on(Purple.Plugin plugin, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "presence", "signed-on", null);
+        Utils.send_buddy_event(plugin, buddy, "presence", "signed-on", null);
     }
 
-    public static Eventd.Event?
-    signed_off(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
+    public static void
+    signed_off(Purple.Plugin plugin, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "presence", "signed-off", null);
+        Utils.send_buddy_event(plugin, buddy, "presence", "signed-off", null);
     }
 
-    public static Eventd.Event?
-    away(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, string? message)
+    public static void
+    away(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
     {
-        return Utils.send_buddy_event(plugin, buddy, "presence", "away", null, "message", message);
+        Utils.send_buddy_event(plugin, buddy, "presence", "away", null, "message", message);
     }
 
-    public static Eventd.Event?
-    back(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, string? message)
+    public static void
+    back(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
     {
-        return Utils.send_buddy_event(plugin, buddy, "presence", "back", null, "message", message);
+        Utils.send_buddy_event(plugin, buddy, "presence", "back", null, "message", message);
     }
 
-    public static Eventd.Event?
-    status(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, string? message)
+    public static void
+    status(Purple.Plugin plugin, Purple.Buddy buddy, string? message)
     {
-        return Utils.send_buddy_event(plugin, buddy, "presence", "message", null, "message", message);
+        Utils.send_buddy_event(plugin, buddy, "presence", "message", null, "message", message);
     }
 
-    public static Eventd.Event?
-    special(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy, PurpleEvents.EventSpecialType type, ...)
+    public static void
+    idle(Purple.Plugin plugin, Purple.Buddy buddy)
     {
-        return null;
+        Utils.send_buddy_event(plugin, buddy, "presence", "idle", null);
     }
 
-    public static Eventd.Event?
-    idle(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
+    public static void
+    idle_back(Purple.Plugin plugin, Purple.Buddy buddy)
     {
-        return Utils.send_buddy_event(plugin, event, buddy, "presence", "idle", null);
+        Utils.send_buddy_event(plugin, buddy, "presence", "idle-back", null);
     }
 
-    public static Eventd.Event?
-    idle_back(Purple.Plugin plugin, Eventd.Event? event, Purple.Buddy buddy)
-    {
-        return Utils.send_buddy_event(plugin, event, buddy, "presence", "idle-back", null);
-    }
-
-    public static Eventd.Event?
-    im_message(Purple.Plugin plugin, Eventd.Event? event, PurpleEvents.MessageType type, Purple.Buddy? buddy, string sender, string message)
+    public static void
+    im_message(Purple.Plugin plugin, PurpleEvents.MessageType type, Purple.Buddy? buddy, string sender, string message)
     {
         unowned string name = "im-msg";
         string msg = null;
@@ -91,20 +85,20 @@ namespace PurpleEventc.Callbacks
         break;
         }
         if ( buddy != null )
-            return Utils.send_buddy_event(plugin, event, buddy, "im", name, null,
+            Utils.send_buddy_event(plugin, buddy, "im", name, null,
                        "unstripped-message", message.dup(),
                        "message", msg
                       );
         else
-            return Utils.send_event(plugin, event, "im", name, null,
+            Utils.send_event(plugin, "im", name, null,
                        "buddy-name", sender,
                        "unstripped-message", message.dup(),
                        "message", msg
                       );
     }
 
-    public static Eventd.Event
-    chat_message(Purple.Plugin plugin, Eventd.Event? event, PurpleEvents.MessageType type, Purple.Conversation conv, Purple.Buddy? buddy, string sender, string message)
+    public static void
+    chat_message(Purple.Plugin plugin, PurpleEvents.MessageType type, Purple.Conversation conv, Purple.Buddy? buddy, string sender, string message)
     {
         unowned string name = "chat-msg";
         string msg = null;
@@ -125,12 +119,12 @@ namespace PurpleEventc.Callbacks
         }
 
         if ( buddy != null )
-            return Utils.send_buddy_event(plugin, event, buddy, "chat", name, null,
+            Utils.send_buddy_event(plugin, buddy, "chat", name, null,
                        "unstripped-message", message.dup(),
                        "message", msg
                       );
         else
-            return Utils.send_event(plugin, event, "chat", name, null,
+            Utils.send_event(plugin, "chat", name, null,
                        "buddy-name", sender,
                        "unstripped-message", message.dup(),
                        "message", msg

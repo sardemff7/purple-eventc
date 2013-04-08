@@ -25,11 +25,8 @@ namespace PurpleEventc
     namespace Utils
     {
         static bool
-        check_dispatch(Eventd.Event? old_event)
+        check_dispatch()
         {
-            if ( old_event != null )
-                return false;
-
             try
             {
                 if ( ! eventc.is_connected() )
@@ -45,9 +42,9 @@ namespace PurpleEventc
         }
 
         static Eventd.Event?
-        send_buddy_event(Purple.Plugin *plugin, Eventd.Event? old_event, Purple.Buddy *buddy, string category, string type, void *attach, ...)
+        send_buddy_event(Purple.Plugin *plugin, Purple.Buddy *buddy, string category, string type, void *attach, ...)
         {
-            if ( ! check_dispatch(old_event) )
+            if ( ! check_dispatch() )
                 return null;
 
             var event = new Eventd.Event(category, type);
@@ -89,9 +86,9 @@ namespace PurpleEventc
         }
 
         static Eventd.Event?
-        send_event(Purple.Plugin *plugin, Eventd.Event? old_event, string category, string type, void *attach, ...)
+        send_event(Purple.Plugin *plugin, string category, string type, void *attach, ...)
         {
-            if ( ! check_dispatch(old_event) )
+            if ( ! check_dispatch() )
                 return null;
 
             var data = va_list();
@@ -101,11 +98,6 @@ namespace PurpleEventc
         static Eventd.Event?
         send_event_internal(Purple.Plugin *plugin, Eventd.Event event, va_list data, void *attach)
         {
-            event.ended.connect(() => {
-                unowned PurpleEvents.Handler handler = (PurpleEvents.Handler)plugin->extra;
-                handler.remove_event(attach, event);
-            });
-
             while ( true )
             {
                 string? key = data.arg();
