@@ -29,7 +29,6 @@ namespace PurpleEventc
 
     static uint server_info_changed_id;
     static uint server_info_changed_timeout = 0U;
-    static uint timeout_changed_id;
 
     static bool
     server_info_changed_apply(void *user_data)
@@ -48,12 +47,6 @@ namespace PurpleEventc
         server_info_changed_timeout = PurpleCustom.timeout_add_seconds(5, (PurpleCustom.SourceFunc)server_info_changed_apply, null);
     }
 
-    static void
-    timeout_changed(string name, Purple.PrefType type, void *val, void *user_data)
-    {
-        eventc.timeout = Purple.prefs_get_int("/plugins/core/eventc/connection/timeout");
-    }
-
     static new bool
     connect()
     {
@@ -64,7 +57,7 @@ namespace PurpleEventc
             {
                 eventc.connect.end(res);
             }
-            catch ( Eventc.EventcError e )
+            catch ( Eventc.Error e )
             {
                 GLib.warning(_("Error connecting to eventd: %s"), e.message);
                 var max_tries = Purple.prefs_get_int("/plugins/core/eventc/connection/max-tries");
@@ -93,16 +86,9 @@ namespace PurpleEventc
 
         eventc = new Eventc.Connection(Purple.prefs_get_string("/plugins/core/eventc/server/host"));
 
-        eventc.timeout = Purple.prefs_get_int("/plugins/core/eventc/connection/timeout");
-
         server_info_changed_id = PurpleCustom.prefs_connect_callback(plugin,
             "/plugins/core/eventc/server",
             (PurpleCustom.PrefCallback)server_info_changed, null
-            );
-
-        timeout_changed_id = PurpleCustom.prefs_connect_callback(plugin,
-            "/plugins/core/eventc/connection/timeout",
-            (PurpleCustom.PrefCallback)timeout_changed, null
             );
 
         connect();
@@ -210,7 +196,6 @@ namespace PurpleEventc
         );
 
         Purple.prefs_disconnect_callback(server_info_changed_id);
-        Purple.prefs_disconnect_callback(timeout_changed_id);
 
         if ( retry_source > 0 )
         {
@@ -223,7 +208,7 @@ namespace PurpleEventc
             {
                 eventc.close.end(res);
             }
-            catch ( Eventc.EventcError e )
+            catch ( Eventc.Error e )
             {
                 GLib.warning(_("Error closing connection to eventd: %s"), e.message);
             }
