@@ -83,12 +83,8 @@ _purple_eventc_init(PurplePlugin *plugin)
 
     purple_prefs_add_none("/plugins/core/eventc");
 
-    purple_prefs_add_none("/plugins/core/eventc/server");
-    purple_prefs_add_string("/plugins/core/eventc/server/host", "localhost");
-    purple_prefs_add_int("/plugins/core/eventc/server/port", 0);
-
     purple_prefs_add_none("/plugins/core/eventc/connection");
-    purple_prefs_add_int("/plugins/core/eventc/connection/timeout", 3);
+    purple_prefs_add_string("/plugins/core/eventc/connection/host", "localhost");
     purple_prefs_add_int("/plugins/core/eventc/connection/max-tries", 3);
     purple_prefs_add_int("/plugins/core/eventc/connection/retry-delay", 10);
 

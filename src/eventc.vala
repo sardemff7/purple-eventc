@@ -34,7 +34,7 @@ namespace PurpleEventc
     server_info_changed_apply(void *user_data)
     {
         server_info_changed_timeout = 0U;
-        eventc.host = Purple.prefs_get_string("/plugins/core/eventc/server/host");
+        eventc.host = Purple.prefs_get_string("/plugins/core/eventc/connection/host");
         connect();
         return false;
     }
@@ -84,10 +84,10 @@ namespace PurpleEventc
     {
         tries = 0;
 
-        eventc = new Eventc.Connection(Purple.prefs_get_string("/plugins/core/eventc/server/host"));
+        eventc = new Eventc.Connection(Purple.prefs_get_string("/plugins/core/eventc/connection/host"));
 
         server_info_changed_id = PurpleCustom.prefs_connect_callback(plugin,
-            "/plugins/core/eventc/server",
+            "/plugins/core/eventc/connection/host",
             (PurpleCustom.PrefCallback)server_info_changed, null
             );
 

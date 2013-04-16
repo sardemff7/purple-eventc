@@ -31,45 +31,15 @@ namespace PurpleEventc
             Purple.PluginPrefFrame *frame = new Purple.PluginPrefFrame();
 
             pref = new Purple.PluginPref.with_label(
-                _("Server:")
-                );
-            frame->add(pref);
-
-            pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/server/host",
-                _("Host")
-                );
-            frame->add(pref);
-
-            pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/server/port",
-                _("Port")
-                );
-            frame->add(pref);
-            pref->set_bounds(0, 65535);
-
-            pref = new Purple.PluginPref.with_label(
-                _("Client:")
-                );
-            frame->add(pref);
-
-            pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/client/category",
-                _("Category")
-                );
-            frame->add(pref);
-
-            pref = new Purple.PluginPref.with_label(
                 _("Connection:")
                 );
             frame->add(pref);
 
             pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/connection/timeout",
-                _("Timeout (seconds, 0 to disable)")
+                "/plugins/core/eventc/connection/host",
+                _("Host")
                 );
             frame->add(pref);
-            pref->set_bounds(0, 3600);
 
             pref = new Purple.PluginPref.with_name_and_label(
                 "/plugins/core/eventc/connection/max-tries",
