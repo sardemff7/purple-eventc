@@ -117,7 +117,7 @@ namespace PurpleEventc
         );
         Purple.signal_connect(
             handle, "user-presence.idle-back", plugin,
-            (Purple.Callback) Callbacks.idle, plugin
+            (Purple.Callback) Callbacks.idle_back, plugin
         );
         Purple.signal_connect(
             handle, "user-presence.message", plugin,
@@ -171,7 +171,7 @@ namespace PurpleEventc
         );
         Purple.signal_disconnect(
             handle, "user-presence.idle-back", plugin,
-            (Purple.Callback) Callbacks.idle
+            (Purple.Callback) Callbacks.idle_back
         );
         Purple.signal_disconnect(
             handle, "user-presence.message", plugin,
