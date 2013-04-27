@@ -203,18 +203,16 @@ namespace PurpleEventc
             retry_source = 0;
         }
 
-        eventc.close.begin((obj, res) => {
-            try
-            {
-                eventc.close.end(res);
-            }
-            catch ( Eventc.Error e )
-            {
-                GLib.warning(_("Error closing connection to eventd: %s"), e.message);
-            }
+        try
+        {
+            eventc.close();
+        }
+        catch ( Eventc.Error e )
+        {
+            GLib.warning(_("Error closing connection to eventd: %s"), e.message);
+        }
 
-            eventc = null;
-        });
+        eventc = null;
 
         return true;
     }
