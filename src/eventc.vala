@@ -96,48 +96,48 @@ namespace PurpleEventc
         unowned Purple.Plugin handle = Purple.plugins_find_with_id(PurpleEvents.get_plugin_id());
 
         Purple.signal_connect(
-            handle, "user-presence.online", plugin,
+            handle, "user_presence-online", plugin,
             (Purple.Callback) Callbacks.signed_on, plugin
         );
         Purple.signal_connect(
-            handle, "user-presence.offline", plugin,
+            handle, "user_presence-offline", plugin,
             (Purple.Callback) Callbacks.signed_off, plugin
         );
         Purple.signal_connect(
-            handle, "user-presence.away", plugin,
+            handle, "user_presence-away", plugin,
             (Purple.Callback) Callbacks.away, plugin
         );
         Purple.signal_connect(
-            handle, "user-presence.back", plugin,
+            handle, "user_presence-back", plugin,
             (Purple.Callback) Callbacks.back, plugin
         );
         Purple.signal_connect(
-            handle, "user-presence.idle", plugin,
+            handle, "user_presence-idle", plugin,
             (Purple.Callback) Callbacks.idle, plugin
         );
         Purple.signal_connect(
-            handle, "user-presence.idle-back", plugin,
+            handle, "user_presence-idle-back", plugin,
             (Purple.Callback) Callbacks.idle_back, plugin
         );
         Purple.signal_connect(
-            handle, "user-presence.message", plugin,
+            handle, "user_presence-message", plugin,
             (Purple.Callback) Callbacks.status, plugin
         );
 
         Purple.signal_connect(
-            handle, "user-im.received", plugin,
+            handle, "user_im-received", plugin,
             (Purple.Callback) Callbacks.im_message, plugin
         );
         Purple.signal_connect(
-            handle, "user-im.highlight", plugin,
+            handle, "user_im-highlight", plugin,
             (Purple.Callback) Callbacks.im_highlight, plugin
         );
         Purple.signal_connect(
-            handle, "user-chat.received", plugin,
+            handle, "user_chat-received", plugin,
             (Purple.Callback) Callbacks.chat_message, plugin
         );
         Purple.signal_connect(
-            handle, "user-chat.highlight", plugin,
+            handle, "user_chat-highlight", plugin,
             (Purple.Callback) Callbacks.chat_highlight, plugin
         );
 
@@ -150,48 +150,48 @@ namespace PurpleEventc
         unowned Purple.Plugin handle = Purple.plugins_find_with_id(PurpleEvents.get_plugin_id());
 
         Purple.signal_disconnect(
-            handle, "user-presence.online", plugin,
+            handle, "user_presence-online", plugin,
             (Purple.Callback) Callbacks.signed_on
         );
         Purple.signal_disconnect(
-            handle, "user-presence.offline", plugin,
+            handle, "user_presence-offline", plugin,
             (Purple.Callback) Callbacks.signed_off
         );
         Purple.signal_disconnect(
-            handle, "user-presence.away", plugin,
+            handle, "user_presence-away", plugin,
             (Purple.Callback) Callbacks.away
         );
         Purple.signal_disconnect(
-            handle, "user-presence.back", plugin,
+            handle, "user_presence-back", plugin,
             (Purple.Callback) Callbacks.back
         );
         Purple.signal_disconnect(
-            handle, "user-presence.idle", plugin,
+            handle, "user_presence-idle", plugin,
             (Purple.Callback) Callbacks.idle
         );
         Purple.signal_disconnect(
-            handle, "user-presence.idle-back", plugin,
+            handle, "user_presence-idle-back", plugin,
             (Purple.Callback) Callbacks.idle_back
         );
         Purple.signal_disconnect(
-            handle, "user-presence.message", plugin,
+            handle, "user_presence-message", plugin,
             (Purple.Callback) Callbacks.status
         );
 
         Purple.signal_disconnect(
-            handle, "user-im.received", plugin,
+            handle, "user_im-received", plugin,
             (Purple.Callback) Callbacks.im_message
         );
         Purple.signal_disconnect(
-            handle, "user-im.highlight", plugin,
+            handle, "user_im-highlight", plugin,
             (Purple.Callback) Callbacks.im_highlight
         );
         Purple.signal_disconnect(
-            handle, "user-chat.received", plugin,
+            handle, "user_chat-received", plugin,
             (Purple.Callback) Callbacks.chat_message
         );
         Purple.signal_disconnect(
-            handle, "user-chat.highlight", plugin,
+            handle, "user_chat-highlight", plugin,
             (Purple.Callback) Callbacks.chat_highlight
         );
 
