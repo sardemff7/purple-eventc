@@ -28,6 +28,7 @@ AC_PROG_INSTALL
 glib_min_major="2"
 glib_min_minor="28"
 glib_min_version="${glib_min_major}.${glib_min_minor}"
+libeventd_min_version="0.4"
 purple_events_min_version=0.3
 
 AM_CFLAGS="-Wall -Wextra -Wno-unused-parameter"
@@ -51,7 +52,7 @@ AC_SUBST(GIO_VALAFLAGS)
 #
 # Check for libeventc
 #
-PKG_CHECK_MODULES(EVENTD, [libeventd libeventc])
+PKG_CHECK_MODULES(EVENTD, [libeventd >= ${libeventd_min_version} libeventc])
 EVENTD_VALAFLAGS="--pkg libeventd --pkg libeventc"
 AC_SUBST(EVENTD_VALAFLAGS)
 
