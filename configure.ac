@@ -51,8 +51,8 @@ AC_SUBST(GIO_VALAFLAGS)
 #
 # Check for libeventc
 #
-PKG_CHECK_MODULES(EVENTD, [libeventd-event libeventc])
-EVENTD_VALAFLAGS="--pkg libeventd-event --pkg libeventc"
+PKG_CHECK_MODULES(EVENTD, [libeventd libeventc])
+EVENTD_VALAFLAGS="--pkg libeventd --pkg libeventc"
 AC_SUBST(EVENTD_VALAFLAGS)
 
 #
