@@ -60,6 +60,8 @@ eventc_la_LIBADD = \
 	$(GLIB_LIBS)
 
 
+-include local-rules.mk
+
 #
 # Hooks
 #

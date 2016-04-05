@@ -1,3 +1,4 @@
 /src/config.h*
 /src/*.c
 !/src/plugin.c
+/local-rules.mk
