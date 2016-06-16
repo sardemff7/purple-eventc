@@ -49,18 +49,39 @@ namespace PurpleEventc
 
             var event = new Eventd.Event(category, type);
 
-            event.add_data("buddy-name", PurpleEvents.Utils.buddy_get_best_name(buddy));
+            event.add_data_string("buddy-name", PurpleEvents.Utils.buddy_get_best_name(buddy));
 
             if ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-buddy-icon") )
             {
                 var buddy_icon = buddy->get_icon();
                 if ( buddy_icon != null )
-                    event.add_data("buddy-icon", GLib.Base64.encode(PurpleCustom.buddy_icon_get_data(buddy_icon)));
+                {
+                    unowned string mime_type = null;
+                    switch ( buddy_icon.get_extension() )
+                    {
+                    case "gif":
+                        mime_type = "image/gif";
+                    break;
+                    case "jpg":
+                        mime_type = "image/jpeg";
+                    break;
+                    case "png":
+                        mime_type = "image/png";
+                    break;
+                    case "tif":
+                        mime_type = "image/tiff";
+                    break;
+                    case "bmp":
+                        mime_type = "image/x-ms-bmp";
+                    break;
+                    }
+                    event.add_data("buddy-icon", new GLib.Variant("(msmsv)", mime_type, null, GLib.Variant.new_from_data(GLib.VariantType.BYTESTRING, PurpleCustom.buddy_icon_get_data(buddy_icon), false, buddy_icon)));
+                }
             }
 
             unowned string protoname = PurpleEvents.Utils.buddy_get_protocol(buddy);
 
-            event.add_data("protocol-name", protoname);
+            event.add_data_string("protocol-name", protoname);
 
             if ( ( ! Purple.prefs_get_bool("/plugins/core/eventc/restrictions/no-protocol-icon") ) && ( protoname != null ) )
             {
@@ -72,7 +93,7 @@ namespace PurpleEventc
                     {
                         uint8[] protocol_icon_data;
                         GLib.FileUtils.get_data(filename, out protocol_icon_data);
-                        event.add_data("protocol-icon", GLib.Base64.encode(protocol_icon_data));
+                        event.add_data("protocol-icon", new GLib.Variant("(msmsv)", "image/svg+xml", null, GLib.Variant.new_from_data<uint8[]>(GLib.VariantType.BYTESTRING, protocol_icon_data, false), protocol_icon_data));
                     }
                     catch ( GLib.Error e )
                     {
@@ -105,7 +126,7 @@ namespace PurpleEventc
                     break;
                 string? val = data.arg();
                 if ( val != null )
-                    event.add_data(key, val);
+                    event.add_data_string(key, val);
             }
 
             try
