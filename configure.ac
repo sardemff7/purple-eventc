@@ -53,7 +53,7 @@ AC_SUBST(GIO_VALAFLAGS)
 # Check for libeventc
 #
 PKG_CHECK_MODULES(EVENTD, [libeventd >= ${eventd_min_version} libeventc >= ${eventd_min_version}])
-EVENTD_VALAFLAGS="--pkg libeventd --pkg libeventc"
+EVENTD_VALAFLAGS="--pkg Eventd-0 --pkg Eventc-0"
 AC_SUBST(EVENTD_VALAFLAGS)
 
 #

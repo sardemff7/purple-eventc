@@ -34,16 +34,16 @@ namespace PurpleEventc
     server_info_changed_apply(void *user_data)
     {
         server_info_changed_timeout = 0U;
-        var host = Purple.prefs_get_string("/plugins/core/eventc/connection/host");
+        var uri = Purple.prefs_get_string("/plugins/core/eventc/connection/uri");
         try
         {
             if ( eventc == null )
-                eventc = new Eventc.Connection(host);
+                eventc = new Eventc.Connection(uri);
             else
-                eventc.set_host(host);
+                eventc.set_uri(uri);
             connect();
         }
-        catch ( Eventc.Error e )
+        catch ( GLib.Error e )
         {
 
         }
@@ -71,7 +71,7 @@ namespace PurpleEventc
             {
                 eventc.connect.end(res);
             }
-            catch ( Eventc.Error e )
+            catch ( GLib.Error e )
             {
                 GLib.warning(_("Error connecting to eventd: %s"), e.message);
                 var max_tries = Purple.prefs_get_int("/plugins/core/eventc/connection/max-tries");
@@ -97,20 +97,20 @@ namespace PurpleEventc
     load(Purple.Plugin plugin)
     {
         tries = 0;
-        var host = Purple.prefs_get_string("/plugins/core/eventc/connection/host");
+        var uri = Purple.prefs_get_string("/plugins/core/eventc/connection/uri");
 
         try
         {
-            eventc = new Eventc.Connection(host);
+            eventc = new Eventc.Connection(uri);
             connect();
         }
-        catch ( Eventc.Error e )
+        catch ( GLib.Error e )
         {
 
         }
 
         server_info_changed_id = PurpleCustom.prefs_connect_callback(plugin,
-            "/plugins/core/eventc/connection/host",
+            "/plugins/core/eventc/connection/uri",
             (PurpleCustom.PrefCallback)server_info_changed, null
             );
 
@@ -229,7 +229,7 @@ namespace PurpleEventc
         {
             eventc.close();
         }
-        catch ( Eventc.Error e )
+        catch ( GLib.Error e )
         {
             GLib.warning(_("Error closing connection to eventd: %s"), e.message);
         }

@@ -36,8 +36,8 @@ namespace PurpleEventc
             frame->add(pref);
 
             pref = new Purple.PluginPref.with_name_and_label(
-                "/plugins/core/eventc/connection/host",
-                _("Host")
+                "/plugins/core/eventc/connection/uri",
+                _("URI")
                 );
             frame->add(pref);
 

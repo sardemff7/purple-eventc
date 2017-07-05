@@ -32,7 +32,7 @@ namespace PurpleEventc
                 if ( ! eventc.is_connected() )
                     return false;
             }
-            catch ( Eventc.Error e )
+            catch ( GLib.Error e )
             {
                 GLib.warning(_("Error dispatching event: %s"), e.message);
                 reconnect();
@@ -131,9 +131,9 @@ namespace PurpleEventc
 
             try
             {
-                eventc.event(event);
+                eventc.send_event(event);
             }
-            catch ( Eventc.Error e )
+            catch ( GLib.Error e )
             {
                 GLib.warning(_("Error dispatching event: %s"), e.message);
                 try
@@ -145,7 +145,7 @@ namespace PurpleEventc
                     if ( ! eventc.is_connected() )
                         reconnect();
                 }
-                catch ( Eventc.Error e ) {}
+                catch ( GLib.Error e ) {}
             }
             return event;
         }

@@ -53,7 +53,7 @@ static PurplePluginInfo _purple_eventc_info = {
     .summary        = NULL,
     .description    = NULL,
     .author         = "Quentin \"Sardem FF7\" Glidic <sardemff7+pidgin@sardemff7.net>",
-    .homepage       = "http://sardemff7.github.com/purple-eventc/",
+    .homepage       = "https://clients.eventd.org/purple/",
 
     .load           = purple_eventc_load,
     .unload         = purple_eventc_unload,
@@ -84,7 +84,7 @@ _purple_eventc_init(PurplePlugin *plugin)
     purple_prefs_add_none("/plugins/core/eventc");
 
     purple_prefs_add_none("/plugins/core/eventc/connection");
-    purple_prefs_add_string("/plugins/core/eventc/connection/host", "localhost");
+    purple_prefs_add_string("/plugins/core/eventc/connection/uri", "");
     purple_prefs_add_int("/plugins/core/eventc/connection/max-tries", 3);
     purple_prefs_add_int("/plugins/core/eventc/connection/retry-delay", 10);
 
