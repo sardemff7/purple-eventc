@@ -28,7 +28,7 @@ AC_PROG_INSTALL
 glib_min_major="2"
 glib_min_minor="28"
 glib_min_version="${glib_min_major}.${glib_min_minor}"
-eventd_min_version="0.5.2"
+eventd_min_version="0.23.90"
 purple_events_min_version=0.3
 
 AM_CFLAGS="-Wall -Wextra -Wno-unused-parameter"
